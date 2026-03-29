@@ -236,14 +236,7 @@ We may update this Privacy Notice from time to time. The updated version will be
 
 ## 12. How Can You Contact Us About This Notice?
 
-If you have questions or comments about this notice, you may email us at [grandpabombin@gmail.com](mailto:grandpabombin@gmail.com) or contact us by post at:
-
-```
-Tim Logsdon
-1588 Needmore Road
-Morgantown, KY 42261
-United States
-```
+If you have questions or comments about this notice, you may email us at [grandpabombin@gmail.com](mailto:grandpabombin@gmail.com)
 
 ---
 
