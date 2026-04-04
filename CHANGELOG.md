@@ -1,6 +1,18 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.1.18a
+### MP CURRENCY + INTERACTABLES + MAP FIX
+- **[FIX]** MP client lost all money on armory entry
+  - _Root cause: _currency not replicated; server always read 0 from remote player node. Fixed: client pushes _currency to server via rpc_save_client_currency before scene change._
+- **[FIX]** MP client unable to activate dustbin or wallbuy station
+  - _Root cause: same _currency=0 issue caused affordability check to always fail on server. Fixed: client passes its currency with the purchase request; deduction sent back via deduct_currency RPC on PlayerBasics._
+- **[FIX]** Armory return loaded wrong map
+  - _Root cause: reset() hardcoded selected_map = Map002. Fixed: default_map var set at map select time; reset() restores to default_map instead._
+- **[FIX]** Post-game lobby IP input field not editable
+  - _Root cause: _ready() unconditionally set ip_input.editable = false on every lobby load. Fixed: field always starts blank and editable; _on_host() locks it when hosting._
+
+
 ## v3.1.17a
 ### MP SPRITE SELECT + HYPNORAY ALLY PERSISTENCE + BHG + INTERMISSION
 - **[ADD]** Separate LAN mode layout for sprite select screen
@@ -558,4 +570,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-04 (v3.1.17a)_
+_Changelog updated 2026-04-04 (v3.1.18a)_
