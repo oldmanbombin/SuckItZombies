@@ -1,6 +1,31 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.1.17a
+### MP SPRITE SELECT + HYPNORAY ALLY PERSISTENCE + BHG + INTERMISSION
+- **[ADD]** Separate LAN mode layout for sprite select screen
+  - _In MP: background swaps to LANSpriteSelectScreen.png, stats label hidden. Sprite button and confirm button positions adjustable via exported Vector2 vars on sprite_select.gd (inspector-tunable, default to solo positions)._
+- **[ADD]** MP sessions start fresh -- all solo armory unlocks ignored
+  - _GameManager.is_armory_item_unlocked() returns false for everything in MP except attachments/laser. Solo save file is never read or modified during MP. Laser sight is pre-unlocked for all MP players from spawn._
+- **[FIX]** Post-game lobby incorrectly pre-selected previous map and showed "Change Map" button
+  - _Root cause: map_confirmed and selected_map were intentionally preserved across reset() for a Play Again loop that does not exist in MP. Both are now cleared in reset(). map_select.gd sets map_confirmed = true on map pick, so the mid-session round-trip (lobby -> MapSelect -> lobby) is unaffected._
+- **[ADD]** Intermission bar drains in 2s after armory visit
+  - _siz_game._returned_from_armory bool set in _ready() from GameManager.returning_from_armory. BAR_DURATION overridden to 2.0 if true; otherwise normal tiered duration (7s rounds 1-3, 5s round 4+) applies._
+- **[FIX]** BHG produced no charge orb after swapping away while orb was travelling or collapsing
+  - _Root cause: _on_blackhole_expired() only triggered a new charge if current_weapon == Weapon.BLACKHOLE at expiry time. Swapping away prevented the restart with no recovery path. Fixed: _apply_weapon() now starts a fresh charge when switching to BHG with no valid charged orb and no active singularity._
+- **[FIX]** HypnoRay allies wiped on armory visit
+  - _Root cause: change_scene_to_file() destroyed all scene nodes including live allies. Fixed: ally state (enemy_type, position, kills_remaining) saved into saved_player_state before scene change via _save_hypno_allies(). On armory return, _spawn_player() respawns each ally at its saved position with remaining kill budget, then calls link_restored_hypno_ally() on the player._
+  - _Additional: is_restored_ally flag set before add_child() so _ready() skips add_to_group("enemies") and the nav-snap await that was teleporting restored allies off-screen._
+- **[FIX]** HypnoRay allies converted under BHG singularity influence had distorted scale
+  - _Root cause: become_hypno_ally() never reset sprite or root scale after BHG pull distortion. Fixed: sprite scale/offset/rotation/position and root scale all reset to defaults at conversion. _in_singularity_pull cleared._
+- **[TWEAK]** HypnoRay ally movement speed increased 1.6x
+  - _Allies used bare MAX_SPEED which was insufficient to catch enemies fleeing toward the player. _ALLY_SPEED_MULT = 1.6 applied to both engage (nav-path) and flank movement._
+- **[FIX]** Sec button allies-active state not restored after armory return
+  - _apply_armory_selections() now calls _sec_btn.set_allies_active(true) if _hypno_allies is non-empty after reset. New link_restored_hypno_ally() method on PlayerBasics handles the same for respawned allies._
+- **[FIX]** Active BHG singularities not cleared at round end
+  - _Added loop in _begin_intermission() over World/BlackHoles children; calls _expire(false) on any valid BHG node._
+
+
 ## v3.1.16a
 ### ARMORY POLISH + SPEED TUNING + MP HEALTH PICKUP FIX
 - **[FIX]** LAN client could never pick up health items
@@ -533,4 +558,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-03 (v3.1.14a)_
+_Changelog updated 2026-04-04 (v3.1.17a)_
