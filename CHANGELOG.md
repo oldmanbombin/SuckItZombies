@@ -1,6 +1,28 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.1.16a
+### ARMORY POLISH + SPEED TUNING + MP HEALTH PICKUP FIX
+- **[FIX]** LAN client could never pick up health items
+  - _Root cause (primary): GameManager.reset() cleared is_multiplayer_game = false, which ran after _on_connected_to_server() set it to true. Client always loaded solo player stats (player_0001, MAX_HP=80) instead of lan_default (MAX_HP=60). Server used lan_default so MAX_HP mismatched -- server saw hp=70 >= MAX_HP=60 and skipped the client every frame. Fixed: is_multiplayer_game removed from reset(); it now persists until main menu loads._
+  - _Root cause (secondary): is_multiplayer_game was never set to true on the client at all. Fixed: GameManager.is_multiplayer_game = true added to _on_connected_to_server() in multiplayer_lobby.gd._
+  - _Root cause (tertiary): hp not synced to server via MultiplayerSynchronizer. Fixed: hp added as property 5 (replication_mode=1, on-change) to all four BasicPlayer scene replication configs._
+- **[FIX]** restore_from_state() could set hp above MAX_HP on round transitions
+  - _Root cause: saved hp captured before _load_player_attributes() had clamped MAX_HP down, then restored unclamped. Fixed: hp = min(saved_hp, MAX_HP) on restore._
+- **[TWEAK]** Movement speed increased to 1.5x across all players, enemies, and drone
+  - _player_attributes.json: player_0001/0004 145->218, player_0002/0003 90->135, lan_default 115->173. enemies.json: basic 105->158, runner 160->240, tank 95->143, mutant_basic 120->180, mutant_runner 176->264, mutant_tank 114->228. deployed_drone.gd MOVE_SPEED 160->240._
+- **[TWEAK]** Intermission bar drain tiered -- rounds 1-3: 7s, round 4+: 5s
+  - _BAR_DURATION converted from const to var; set dynamically before drain activates based on GameManager.round_number._
+- **[FIX]** Completed-round label removed from intermission sequence
+  - _Phase 2 (ROUND X label fade in/out) stripped from _run_intermission_sequence(). Bar drains immediately after white flash._
+- **[ADD]** Armory item selection highlight -- red 12px border on first-tap (pending) panel
+  - _StyleBoxFlat border applied via _set_pending_highlight(). Clears on tap-away, successful purchase, subcategory change, or scene exit._
+- **[ADD]** "Not enough cash" flash -- pending panel border blinks 3x, Unable.mp3 plays
+  - _Flash runs in _process via _flash_panel state var. Panel stays highlighted after flash; clears only on tap-away or purchase._
+- **[ADD]** Waiting.png on armory back button in MP -- button hides, waiting image pulses brightness while server waits for all peers to confirm exit
+- **[ADD]** Pressed textures wired for back buttons on Armory, MapSelect, and SpriteSelect screens
+  - _MapSelectGoBackPressed.png used for Armory and MapSelect. SpriteSelectGoBackPressed.png used for SpriteSelect._
+
 ## v3.1.14a
 ### MULTIPLAYER BUGFIX PASS
 - **[FIX]** Round number never synced to client -- client always remained on round 0
