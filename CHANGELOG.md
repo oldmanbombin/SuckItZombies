@@ -1,6 +1,21 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.2.1a
+### CODE AUDIT + RELOAD SOUND SYSTEM
+- **[FIX]** Removed dead variables: `prompt_inventory_pulse`, `PISTOL_1911_COST`, `PLAYER_COLORS`, `_reloading_blackhole`
+- **[FIX]** Removed orphaned functions: `_setup_weapon_hud`, `_is_first_run`, `_cleanup_labels`, `_show_round_label_rpc`, `_start_reload_blackhole`, `_finish_reload_blackhole`, `_play_unable` and `_burst_glow` on InventoryButton, `_report_ready_rpc` stub in armory
+- **[FIX]** Removed dead conditionals: `bhg_pull` upgrade check (draw force now unconditional), legacy `fmj` key from `_fmj_enabled`
+- **[FIX]** Removed stale armory_selections comment referencing `quick_reload`, `rapid_fire`, `extended_mag`, `fmj`
+- **[FIX]** Removed 4 `[ArmoryFlash]` debug prints left in armory `_process`
+- **[FIX]** Fixed wrong comment in DashButton and SecondaryAbilityButton claiming fill_ratio reaches 0.8 (actual: 0.5)
+- **[FIX]** Inlined `_finish_reload_blackhole` body directly into `on_blackhole_expired`
+- **[ADD]** Reload sound system -- 3 tiers: full (no upgrades), short (weapon attachment OR Universal Speed Loader), shorter (both)
+  - _`_play_reload_sound()` checks `mosin_reload`/`sg_reload`/`g_reload` per active weapon and `accoutrement/speed_loader`. ShorterReloadAudio.mp3 added as preload._
+- **[TWEAK]** `RELOAD_DURATION` normalized to 2.0 in GDScript and all `player_attributes.json` entries (was 2.04)
+- **[TWEAK]** Universal Speed Loader multiplier corrected to x0.75 (was x0.8) -- matches per-weapon reload attachments
+- **[TWEAK]** All reload attachment descriptions updated to "Reloads 25% faster." / "All weapons reload 25% faster."
+
 ## v3.2a
 ### MUSIC OVERHAUL + PAUSE MENU AUDIO CONTROLS
 - **[ADD]** Per-round playlist -- one shuffled track per round, looping until round ends
@@ -583,4 +598,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-04 (v3.2a)_
+_Changelog updated 2026-04-05 (v3.2.1a)_
