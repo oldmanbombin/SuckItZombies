@@ -1,6 +1,19 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.2a
+### MUSIC OVERHAUL + PAUSE MENU AUDIO CONTROLS
+- **[ADD]** Per-round playlist -- one shuffled track per round, looping until round ends
+  - _GAME_PLAYLIST holds 8 tracks. Armory music (Itty_Bitty_8_Bit) excluded from rotation. Track advances on intermission bar drain or armory return; never double-advances._
+- **[ADD]** Dedicated armory music -- Itty Bitty 8 Bit plays on entry, crossfades back to next track on exit
+- **[ADD]** Crossfade between all track transitions -- dual AudioStreamPlayer swap with 1.5s tween
+  - _MusicManager holds _player_a/_player_b; roles swap on each transition. Outgoing fades to -80dB and stops; incoming fades in from -80dB._
+- **[ADD]** Music and SFX volume buttons on pause menu -- same assets and logic as main menu
+- **[ADD]** Prev/Next track skip buttons on pause menu
+  - _PausePrevTrackButton and PauseNextTrackButton call go_to_previous_track() / advance_to_next_track() on MusicManager. No-op if playlist is empty (menu/armory)._
+- **[FIX]** Track double-skipping on armory return and fresh game start
+  - _Root cause: _on_bar_drained() advanced the track unconditionally, firing even when advance_to_next_track() had already been called in _ready(). Fixed: _armory_music_advanced flag suppresses the bar-drain advance when the track was already stepped._
+
 ## v3.1.18a
 ### MP CURRENCY + INTERACTABLES + MAP FIX
 - **[FIX]** MP client lost all money on armory entry
@@ -570,4 +583,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-04 (v3.1.18a)_
+_Changelog updated 2026-04-04 (v3.2a)_
