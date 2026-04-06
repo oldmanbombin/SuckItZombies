@@ -1,6 +1,26 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.2.4a
+### DASH TRAIL
+- **[ADD]** Dash trail visual -- DashTrail.png flashes at dash origin on each dash, fading in and out over the dash duration
+  - _Trail spawned into world scene (not player) so it stays fixed at dash origin. Scale driven by live DASH_DISTANCE and DASH_KILL_RADIUS so it adjusts automatically with Turbo Fan and Extended Reach upgrades._
+
+## v3.2.3a
+### INITIALS INPUT FIX
+- **[FIX]** Initials LineEdit intermittently unresponsive to touch on first run after update
+  - _Root cause: focus_exited signal connected before node was ready. Fixed: connection moved inside _qualifies block with await get_tree().process_frame before connecting._
+
+## v3.2.2a
+### INVENTORY PERSISTENCE + BUG FIXES
+- **[ADD]** `user://inventory.json` -- stores equipped ability across sessions; wiped by Reset Data
+  - _Attachments and accoutrement derived from ownership at load time. Ability restored if still owned. Saved on armory exit and on mid-game ability swap._
+- **[FIX]** Armory unlocks not applied at game start -- attachments and accoutrement now auto-equipped from ownership; no manual re-equip needed each session
+- **[FIX]** `_meat_bomb_active` stuck true when round ended with a live bomb
+  - _Root cause: bombs freed by scene teardown never emitted their `exploded` signal. Fixed: `_begin_intermission()` now explicitly frees all live meat bombs and calls `_on_meat_bomb_exploded()` for each owner, mirroring the existing BHG singularity cleanup._
+- **[ADD]** Game music playlist now scanned from `res://Audio/Music/Game/` at runtime -- drop any `.mp3` in that folder to add it to rotation; no code changes needed
+  - _`GAME_PLAYLIST` const removed. `_scan_game_playlist()` uses `DirAccess` to build the list on `play_game_music()`. Menu and armory tracks remain as named constants._
+
 ## v3.2.1a
 ### CODE AUDIT + RELOAD SOUND SYSTEM
 - **[FIX]** Removed dead variables: `prompt_inventory_pulse`, `PISTOL_1911_COST`, `PLAYER_COLORS`, `_reloading_blackhole`
@@ -598,4 +618,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-05 (v3.2.1a)_
+_Changelog updated 2026-04-05 (v3.2.2a)_
