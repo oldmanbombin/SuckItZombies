@@ -1,6 +1,21 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.2.5a
+### BHG FIXES + HYPNORAY SOFTLOCK FIX
+- **[FIX]** Ghost orb visible at muzzle after firing BHG
+  - _Root cause: multiple charge spawns possible if _do_blackhole_charge() was called before a prior orb was cleaned up. Fixed: guard added at top of _do_blackhole_charge() -- returns early if a valid charged orb exists or a singularity is active._
+- **[FIX]** BHG charge orb collapsing immediately on game start
+  - _Root cause: _begin_intermission() iterated World/BlackHoles and called _expire() on all children, including the charging orb spawned at startup. Fixed: is_live() added to black_hole_ammo.gd; _begin_intermission() now only expires orbs in TRAVELLING or SINGULARITY phase._
+- **[FIX]** Ammo bar draining and refilling on non-BHG weapons when singularity expired
+  - _Root cause: on_blackhole_expired() set fire_cooldown = BLACKHOLE_FIRE_RATE unconditionally. Fixed: guard added so fire_cooldown is only stamped when current_weapon == Weapon.BLACKHOLE._
+- **[FIX]** BHG idle hum playing while a different weapon was equipped
+  - _Root cause: idle sound started unconditionally when charge animation completed, with no weapon check. Fixed: idle only starts if _owner_player.current_weapon == BLACKHOLE at charge completion. _apply_weapon() now starts/stops idle sound when swapping to/from BHG._
+- **[FIX]** Hypnoray-converting the last enemy softlocked the round
+  - _Root cause: _convert_to_hypno_allies() removed the enemy from the enemies group but never called report_round_kill(), so the round quota was never satisfied. Fixed: GameManager.score_add_kill() and report_round_kill() called per conversion._
+- **[FIX]** BHG singularity drawing pull lines on hypno allies converted mid-pull
+  - _Root cause: converted allies remained in _victims and continued to be drawn by _draw(). Fixed: _tick_singularity() now checks _victims for hypno_allies group membership and calls _stop_pull() on any found, restoring their scale and erasing the draw entry._
+
 ## v3.2.4a
 ### DASH TRAIL
 - **[ADD]** Dash trail visual -- DashTrail.png flashes at dash origin on each dash, fading in and out over the dash duration
