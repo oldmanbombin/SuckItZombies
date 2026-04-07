@@ -1,7 +1,21 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
-## v3.2.5a
+## v3.2.6a
+### LASER SIGHT + UI POLISH
+- **[ADD]** Laser sight now dynamically crops and repositions when the beam strikes a collision surface -- wall end stays pinned, muzzle end shortens toward the player
+  - _TextureRect replaced with Sprite2D (region_enabled). RayCast2D under Muzzle casts along aim axis (collision_mask 5: terrain + enemies, excludes projectiles). Hit distance mapped proportionally to texture pixels; region_rect.w and position.y updated each physics frame._
+- **[FIX]** Armory tutorial pulse now uses an animated border instead of a yellow background fill -- laser panel retains normal TINT_UNOWNED background
+  - _Pulse reads existing StyleBoxFlat each frame and animates border_color/width. Suppressed while confirm-tap red border is active; border width restored when red border clears._
+- **[FIX]** Confirm-tap red border now visible on top of tutorial pulse effect
+- **[ADD]** Inventory button (ability swap) now fires a blue burst glow on enable and every 2.5s when an ability is owned but not equipped
+  - _Burst suppressed when button is disabled or _needs_equip is false. set_needs_equip() wired from siz_game._
+- **[FIX]** Interact/swap button blue burst no longer fires when approaching an unaffordable interactable
+  - _Root cause: burst fired in set_interact_mode() before set_interact_affordable() was called, so _affordable was still true. Fixed: burst moved to set_interact_affordable(); only fires when affordability transitions to true._
+- **[FIX]** Interact button burst no longer fires behind armory button during intermission
+  - _Guard added to _burst_glow(): returns early if _armory_available is true._
+
+
 ### BHG FIXES + HYPNORAY SOFTLOCK FIX
 - **[FIX]** Ghost orb visible at muzzle after firing BHG
   - _Root cause: multiple charge spawns possible if _do_blackhole_charge() was called before a prior orb was cleaned up. Fixed: guard added at top of _do_blackhole_charge() -- returns early if a valid charged orb exists or a singularity is active._
@@ -633,4 +647,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-05 (v3.2.2a)_
+_Changelog updated 2026-04-07 (v3.2.6a)_
