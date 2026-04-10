@@ -1,6 +1,15 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.2.7a
+### CRAWLERS + UI POLISH + QOL
+- **[ADD]** Crawler enemy -- bomb-damaged but surviving enemies convert to crawlers; tank speed, 2/3 basic HP for current round, any round
+- **[ADD]** "Armory Available!" banner -- pre-placed TextureRect pulses on intermission start; suppressed on armory return
+- **[ADD]** Armory button blue glow pulse during intermission -- lighthouse curve (bright ~0.5s, dark <0.25s)
+- **[TWEAK]** Inventory button pulse reworked to match armory button lighthouse curve
+- **[TWEAK]** Item drop lifetime +2s in easy mode (20s -> 22s)
+- **[FIX]** Item button texture stuck on wrong state when round ended with active bomb
+
 ## v3.2.6a
 ### LASER SIGHT + UI POLISH
 - **[ADD]** Laser sight now dynamically crops and repositions when the beam strikes a collision surface -- wall end stays pinned, muzzle end shortens toward the player
@@ -647,4 +656,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-07 (v3.2.6a)_
+_Changelog updated 2026-04-09 (v3.2.7a)_
