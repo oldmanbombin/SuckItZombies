@@ -1,6 +1,13 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.2.8a
+### DRONE LIFE METER + INTERMISSION HOLD BLOCK + MANUAL RELOAD + HIGH SCORE ROUND DISPLAY
+- **[ADD]** Drone life meter -- color-shifting bar (green->yellow->red) floats above each drone, draining as kills mount; MP owner-only
+- **[ADD]** Intermission hold-block -- bar drains normally but next-round start defers until armory button is released; hold duration still determines armory vs next round
+- **[ADD]** WeaponDoll tap-to-reload -- tapping the weapon doll area instantly reloads current weapon (0.1s fill); cancels any in-progress auto-reload and plays ManualReloadAudio.mp3; BHG excluded; tap zone is a scene node (TapOutline Panel) positionable in editor
+- **[ADD]** High score screen now records and displays round reached -- R:[n] column between initials and S:[score]; legacy entries show R:?
+
 ## v3.2.7a
 ### CRAWLERS + UI POLISH + QOL
 - **[ADD]** Crawler enemy -- bomb-damaged but surviving enemies convert to crawlers; tank speed, 2/3 basic HP for current round, any round
@@ -656,4 +663,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-09 (v3.2.7a)_
+_Changelog updated 2026-04-10 (v3.2.8a)_
