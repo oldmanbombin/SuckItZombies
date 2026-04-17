@@ -1,6 +1,18 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.3a
+### ENEMY DAMAGE REWORK + HYPNO ALLY FIX + ACCESSIBILITY PASS + Z-INDEX AUDIT
+- **[ADD]** Enemy `contact_damage` stat added to `enemies.json` per type — damage no longer stored on player; hard mode 1.5x multiplier applied enemy-side
+- **[ADD]** Hypno ally attack loop rewritten to `_process`-based timer — eliminates silent coroutine failure bug
+- **[ADD]** Hypno ally damage and speed now inherit from source enemy type
+- **[ADD]** Full z-index hierarchy established across all scenes/scripts; dynamic swap on dash (enemies drop below player and trail during dash, restore on end)
+- **[ADD]** Accessibility pass — mutant enemies recolored magenta (hue shift + aura rings); drone life bar blue→orange; armory owned tint gold; ammo label white; lobby color dots with letter designators (Y/K/D/N)
+- **[FIX]** `HIT_DAMAGE` removed from `PlayerBasics.gd` and `player_attributes.json` — was dead after enemy damage rework
+- **[FIX]** FMJ `_fmj_hit_enemies.append()` unreachable after `continue` — fixed; enemies now correctly tracked per projectile lifetime
+- **[TWEAK]** Drone/bomb armory upgrade labels changed to Mk.II/III/IV
+- **[TWEAK]** MeatBomb Mk.II description updated to reflect actual damage behavior (was "kills basics and runners")
+
 ## v3.2.8a
 ### DRONE LIFE METER + INTERMISSION HOLD BLOCK + MANUAL RELOAD + HIGH SCORE ROUND DISPLAY
 - **[ADD]** Drone life meter -- color-shifting bar (green->yellow->red) floats above each drone, draining as kills mount; MP owner-only
@@ -663,4 +675,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-10 (v3.2.8a)_
+_Changelog updated 2026-04-17 (v3.3a)_
