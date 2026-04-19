@@ -487,7 +487,7 @@
       e.preventDefault();
       navigator.clipboard.writeText('OldManBOMBIN@SuckItZombies.com').then(function() {
         var orig = emailBtn.textContent;
-        emailBtn.textContent = 'Copied!';
+        emailBtn.textContent = 'Address Copied!';
         setTimeout(function() { emailBtn.textContent = orig; scaleBtn(); }, 2000);
       });
     });
@@ -497,7 +497,7 @@
     if (!isMobile) {
       navigator.clipboard.writeText('Bugs@SuckItZombies.com').then(function() {
         var orig = bugBtn.textContent;
-        bugBtn.textContent = 'Copied!';
+        bugBtn.textContent = 'Address Copied!';
         setTimeout(function() { bugBtn.textContent = orig; }, 2000);
       });
     } else {
