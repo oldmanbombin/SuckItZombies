@@ -239,13 +239,13 @@
   .cta-email {
     display: inline-block;
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+    font-size: clamp(0.65rem, 3.5vw, 1.1rem);
     font-weight: 700;
     color: #000;
     background: var(--green);
-    padding: 16px 40px;
+    padding: 16px 24px;
     text-decoration: none;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     box-shadow:
       0 0 20px rgba(74,191,58,0.5),
@@ -253,6 +253,8 @@
       4px 4px 0 #000;
     transition: all 0.15s;
     position: relative;
+    max-width: 100%;
+    word-break: break-all;
   }
   .cta-email:hover {
     background: var(--green-bright);
