@@ -236,25 +236,30 @@
     letter-spacing: 0.05em;
   }
 
+  .cta-email-wrap {
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
   .cta-email {
     display: inline-block;
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(0.65rem, 3.5vw, 1.1rem);
+    font-size: 1.1rem;
     font-weight: 700;
     color: #000;
     background: var(--green);
-    padding: 16px 24px;
+    padding: 16px 32px;
     text-decoration: none;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    white-space: nowrap;
     box-shadow:
       0 0 20px rgba(74,191,58,0.5),
       0 0 40px rgba(74,191,58,0.2),
       4px 4px 0 #000;
-    transition: all 0.15s;
+    transition: background 0.15s, box-shadow 0.15s, transform 0.15s;
     position: relative;
-    max-width: 100%;
-    word-break: break-all;
+    transform-origin: center;
   }
   .cta-email:hover {
     background: var(--green-bright);
@@ -404,18 +409,31 @@
   <section class="cta-section">
     <p class="cta-label">Join the Closed Test</p>
     <p class="cta-sub">Contact us to request access.</p>
+    <div class="cta-email-wrap">
     <a class="cta-email" id="emailBtn" href="mailto:OldManBOMBIN@SuckItZombies.com">OldManBOMBIN@SuckItZombies.com</a>
+  </div>
 
 <script>
   const btn = document.getElementById('emailBtn');
-  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
+  function scaleBtn() {
+    btn.style.transform = 'scale(1)';
+    var wrap = btn.parentElement;
+    var ratio = wrap.offsetWidth / btn.offsetWidth;
+    if (ratio < 1) btn.style.transform = 'scale(' + ratio + ')';
+  }
+  window.addEventListener('resize', scaleBtn);
+  window.addEventListener('load', scaleBtn);
+  scaleBtn();
+
+  var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
   if (!isMobile) {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
       navigator.clipboard.writeText('OldManBOMBIN@SuckItZombies.com').then(function() {
-        const orig = btn.textContent;
+        var orig = btn.textContent;
         btn.textContent = 'Copied!';
-        setTimeout(function() { btn.textContent = orig; }, 2000);
+        setTimeout(function() { btn.textContent = orig; scaleBtn(); }, 2000);
       });
     });
   }
