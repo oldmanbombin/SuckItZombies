@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suck it, Zombies!</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #3a9e2f;
+    --green-bright: #5dcc4a;
+    --green-glow: #4fbf3a;
+    --red-dark: #1a0000;
+    --red-mid: #3d0505;
+    --red-deep: #2a0303;
+    --blood: #6b0000;
+    --text: #e8e8e8;
+    --muted: #999;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--red-dark);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  /* Mottled blood texture background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse at 20% 30%, #3d0000 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, #2a0000 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 50%, #1a0000 0%, transparent 60%),
+      radial-gradient(ellipse at 10% 80%, #330000 0%, transparent 40%),
+      radial-gradient(ellipse at 90% 20%, #280000 0%, transparent 35%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Blob/vein pattern overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.18'/%3E%3C/svg%3E");
+    background-size: 400px 400px;
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    position: relative;
+    padding: 60px 0 40px;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(3rem, 10vw, 7rem);
+    font-weight: 900;
+    color: var(--green);
+    text-shadow:
+      0 0 20px var(--green-glow),
+      0 0 60px rgba(74,191,58,0.4),
+      3px 3px 0 #000,
+      -1px -1px 0 #000,
+      4px 4px 12px rgba(0,0,0,0.9);
+    letter-spacing: 0.04em;
+    line-height: 1.05;
+    animation: flicker 6s infinite;
+  }
+
+  @keyframes flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.85; }
+    97% { opacity: 1; }
+    98% { opacity: 0.9; }
+    99% { opacity: 1; }
+  }
+
+  .hero-subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.75rem, 2vw, 1rem);
+    color: var(--blood);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-top: 8px;
+    text-shadow: 1px 1px 2px #000;
+  }
+
+  /* ---- DIVIDER ---- */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 40px 0;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--blood), transparent);
+  }
+  .divider-icon {
+    color: var(--blood);
+    font-size: 1.2rem;
+  }
+
+  /* ---- VIDEO ---- */
+  .video-section {
+    margin-bottom: 16px;
+  }
+
+  .video-wrap {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border: 2px solid var(--blood);
+    box-shadow:
+      0 0 30px rgba(107,0,0,0.6),
+      0 0 60px rgba(107,0,0,0.3),
+      inset 0 0 20px rgba(0,0,0,0.5);
+  }
+
+  .video-wrap iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+  }
+
+  /* ---- DESCRIPTION ---- */
+  .description {
+    background: rgba(0,0,0,0.45);
+    border-left: 3px solid var(--green);
+    padding: 28px 32px;
+    margin: 40px 0;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.3);
+  }
+
+  .description p {
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    line-height: 1.85;
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+  .description p:last-child { margin-bottom: 0; }
+
+  .description strong {
+    color: var(--green-bright);
+    font-weight: normal;
+  }
+
+  /* ---- FEATURES ---- */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 40px 0;
+  }
+
+  .feature {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(107,0,0,0.5);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .feature::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--green);
+    opacity: 0.5;
+  }
+  .feature:hover {
+    border-color: var(--blood);
+  }
+  .feature:hover::before {
+    opacity: 1;
+  }
+
+  .feature-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--blood);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .feature-value {
+    font-size: 0.9rem;
+    color: #bbb;
+    line-height: 1.5;
+  }
+
+  /* ---- CTA ---- */
+  .cta-section {
+    text-align: center;
+    padding: 40px 0 60px;
+  }
+
+  .cta-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    color: var(--green);
+    text-shadow: 0 0 20px var(--green-glow);
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .cta-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 28px;
+    letter-spacing: 0.05em;
+  }
+
+  .cta-email {
+    display: inline-block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+    font-weight: 700;
+    color: #000;
+    background: var(--green);
+    padding: 16px 40px;
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow:
+      0 0 20px rgba(74,191,58,0.5),
+      0 0 40px rgba(74,191,58,0.2),
+      4px 4px 0 #000;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .cta-email:hover {
+    background: var(--green-bright);
+    box-shadow:
+      0 0 30px rgba(93,204,74,0.7),
+      0 0 60px rgba(93,204,74,0.35),
+      4px 4px 0 #000;
+    transform: translate(-1px, -1px);
+  }
+  .cta-email:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #000;
+  }
+
+  /* ---- CHANGELOG ---- */
+  .changelog-section {
+    margin: 40px 0 60px;
+  }
+
+  .section-heading {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    color: var(--green);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-shadow: 0 0 15px rgba(74,191,58,0.4);
+    margin-bottom: 24px;
+  }
+
+  .changelog-container {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(107,0,0,0.4);
+    max-height: 480px;
+    overflow-y: auto;
+    padding: 28px 32px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--blood) transparent;
+  }
+  .changelog-container::-webkit-scrollbar { width: 6px; }
+  .changelog-container::-webkit-scrollbar-track { background: transparent; }
+  .changelog-container::-webkit-scrollbar-thumb { background: var(--blood); border-radius: 3px; }
+
+  .changelog-container h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    color: var(--green-bright);
+    margin: 24px 0 4px;
+    letter-spacing: 0.08em;
+  }
+  .changelog-container h2:first-child { margin-top: 0; }
+
+  .changelog-container h3 {
+    font-size: 0.7rem;
+    color: var(--blood);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: normal;
+  }
+
+  .changelog-container ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 16px;
+  }
+
+  .changelog-container li {
+    font-size: 0.82rem;
+    color: #999;
+    line-height: 1.7;
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+  .changelog-container li::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: var(--blood);
+  }
+
+  .changelog-container strong {
+    color: #bbb;
+  }
+
+  /* ---- FOOTER ---- */
+  footer {
+    border-top: 1px solid rgba(107,0,0,0.3);
+    padding: 24px 0;
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba(107,0,0,0.6);
+    letter-spacing: 0.15em;
+  }
+
+  /* ---- SCAN LINE EFFECT ---- */
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 3px,
+      rgba(0,0,0,0.04) 3px,
+      rgba(0,0,0,0.04) 4px
+    );
+  }
+</style>
+</head>
+<body>
+
+<div class="scanlines"></div>
+
+<div class="wrapper">
+
+  <section class="hero">
+    <h1 class="hero-title">Suck it,<br>Zombies!</h1>
+    <p class="hero-subtitle">// top-down horde survival // android //</p>
+  </section>
+
+  <div class="divider"><span class="divider-icon">&#9632;</span></div>
+
+  <section class="video-section">
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/Efsy-7O1X90" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-icon">&#9632;</span></div>
+
+  <section>
+    <div class="description">
+      <p><strong>Suck it, Zombies!</strong> is a top-down horde survival game where you play as a robotic vacuum fighting for your life against an ever-growing zombie outbreak.</p>
+      <p>Survive wave after wave of the undead solo or team up with up to 4 friends via LAN multiplayer.</p>
+      <p>Scavenge the map for weapons and power-ups — pistols, shotguns, rifles, and more.</p>
+      <p>Deploy drones, drop MeatBombs, unleash black holes, and hypnotize enemies into fighting for your side.</p>
+      <p>Between rounds, hit the Armory to upgrade your loadout and push deeper into the horde.</p>
+      <p>Multiple maps, a brutal Hard Mode, and a high score system to prove you've still got it.</p>
+    </div>
+
+  </section>
+
+  <div class="divider"><span class="divider-icon">&#9632;</span></div>
+
+  <section class="cta-section">
+    <p class="cta-label">Join the Closed Test</p>
+    <p class="cta-sub">Contact us to request access.</p>
+    <a class="cta-email" href="mailto:OldManBOMBIN@SuckItZombies.com">OldManBOMBIN@SuckItZombies.com</a>
+  </section>
+
+  <div class="divider"><span class="divider-icon">&#9632;</span></div>
+
+  <section class="changelog-section">
+    <h2 class="section-heading">// Changelog</h2>
+    <div class="changelog-container">
+
+      <h2>v3.3a</h2>
+      <h3>Enemy Damage Rework + Hypno Ally Fix + Accessibility Pass + Z-Index Audit</h3>
+      <ul>
+        <li><strong>[ADD]</strong> Enemy contact_damage stat added to enemies.json per type — damage no longer stored on player; hard mode 1.5x multiplier applied enemy-side</li>
+        <li><strong>[ADD]</strong> Hypno ally attack loop rewritten to _process-based timer — eliminates silent coroutine failure bug</li>
+        <li><strong>[ADD]</strong> Hypno ally damage and speed now inherit from source enemy type</li>
+        <li><strong>[ADD]</strong> Full z-index hierarchy established across all scenes/scripts; dynamic swap on dash</li>
+        <li><strong>[ADD]</strong> Accessibility pass — mutant enemies recolored magenta; drone life bar blue to orange; armory owned tint gold; lobby color dots with letter designators</li>
+        <li><strong>[FIX]</strong> HIT_DAMAGE removed from PlayerBasics.gd and player_attributes.json</li>
+        <li><strong>[FIX]</strong> FMJ _fmj_hit_enemies.append() unreachable after continue — enemies now correctly tracked per projectile lifetime</li>
+        <li><strong>[TWEAK]</strong> Drone/bomb armory upgrade labels changed to Mk.II/III/IV</li>
+        <li><strong>[TWEAK]</strong> MeatBomb Mk.II description updated to reflect actual damage behavior</li>
+      </ul>
+
+      <h2>v3.2.8a</h2>
+      <h3>Drone Life Meter + Intermission Hold Block + Manual Reload + High Score Round Display</h3>
+      <ul>
+        <li><strong>[ADD]</strong> Drone life meter — color-shifting bar (green to yellow to red) floats above each drone; MP owner-only</li>
+        <li><strong>[ADD]</strong> Intermission hold-block — next-round start defers until armory button is released</li>
+        <li><strong>[ADD]</strong> WeaponDoll tap-to-reload — tapping the weapon doll area instantly reloads; cancels auto-reload</li>
+        <li><strong>[ADD]</strong> High score screen now records and displays round reached</li>
+      </ul>
+
+      <h2>v3.2.7a</h2>
+      <h3>Crawlers + UI Polish + QoL</h3>
+      <ul>
+        <li><strong>[ADD]</strong> Crawler enemy — bomb-damaged but surviving enemies convert to crawlers</li>
+        <li><strong>[ADD]</strong> "Armory Available!" banner pulses on intermission start</li>
+        <li><strong>[ADD]</strong> Armory button blue glow pulse during intermission</li>
+        <li><strong>[TWEAK]</strong> Item drop lifetime +2s in easy mode</li>
+        <li><strong>[FIX]</strong> Item button texture stuck on wrong state when round ended with active bomb</li>
+      </ul>
+
+      <h2>v3.2.6a</h2>
+      <h3>Laser Sight + UI Polish + BHG Fixes</h3>
+      <ul>
+        <li><strong>[ADD]</strong> Laser sight dynamically crops and repositions when beam strikes a collision surface</li>
+        <li><strong>[FIX]</strong> Armory tutorial pulse uses animated border instead of yellow background fill</li>
+        <li><strong>[FIX]</strong> Hypnoray-converting the last enemy no longer softlocks the round</li>
+        <li><strong>[FIX]</strong> BHG singularity no longer draws pull lines on hypno allies converted mid-pull</li>
+      </ul>
+
+      <h2>v3.2.4a</h2>
+      <h3>Dash Trail</h3>
+      <ul>
+        <li><strong>[ADD]</strong> Dash trail visual — DashTrail.png flashes at dash origin on each dash, fading over dash duration</li>
+      </ul>
+
+      <h2>v3.2.2a</h2>
+      <h3>Inventory Persistence + Bug Fixes</h3>
+      <ul>
+        <li><strong>[ADD]</strong> user://inventory.json — stores equipped ability across sessions; wiped by Reset Data</li>
+        <li><strong>[FIX]</strong> Armory unlocks not applied at game start</li>
+        <li><strong>[FIX]</strong> _meat_bomb_active stuck true when round ended with a live bomb</li>
+      </ul>
+
+      <h2>v3.2.1a</h2>
+      <h3>Code Audit + Reload Sound System</h3>
+      <ul>
+        <li><strong>[ADD]</strong> Reload sound system — 3 tiers based on upgrade state</li>
+        <li><strong>[FIX]</strong> Dead variables and orphaned functions removed across multiple scripts</li>
+      </ul>
+
+      <h2>v3.2a</h2>
+      <h3>Music Overhaul + Pause Menu Audio Controls</h3>
+      <ul>
+        <li><strong>[ADD]</strong> Per-round playlist — one shuffled track per round, looping until round ends</li>
+        <li><strong>[ADD]</strong> Dedicated armory music with crossfade on entry/exit</li>
+        <li><strong>[ADD]</strong> Music and SFX volume buttons on pause menu</li>
+        <li><strong>[ADD]</strong> Prev/Next track skip buttons on pause menu</li>
+      </ul>
+
+      <h2>v3.1.18a</h2>
+      <h3>MP Currency + Interactables + Map Fix</h3>
+      <ul>
+        <li><strong>[FIX]</strong> MP client lost all money on armory entry</li>
+        <li><strong>[FIX]</strong> MP client unable to activate dustbin or wallbuy station</li>
+        <li><strong>[FIX]</strong> Armory return loaded wrong map</li>
+      </ul>
+
+      <h2>v3.0a</h2>
+      <h3>The Armory</h3>
+      <ul>
+        <li><strong>[ADD]</strong> Full Armory — Attachments, Abilities, and Accoutrement upgrade categories with persistent unlocks</li>
+        <li><strong>[ADD]</strong> Armory accessible during intermission via hold-to-open on WeaponSwapButton</li>
+        <li><strong>[ADD]</strong> $1 per-kill reward on every enemy death</li>
+        <li><strong>[TWEAK]</strong> MeatBomb reworked to HP damage scaling with armory tier</li>
+      </ul>
+
+      <h2>v2.3a</h2>
+      <h3>Drone + Dustbin Integration</h3>
+      <ul>
+        <li><strong>[ADD]</strong> Drone item — orbit/follow mode, engage/attack mode, 10-kill expiration</li>
+        <li><strong>[ADD]</strong> Dustbin mystery box — MeatBomb and Drone added to reel pool</li>
+      </ul>
+
+      <h2>v2.2a</h2>
+      <h3>Round System + Scoring + Economy</h3>
+      <ul>
+        <li><strong>[ADD]</strong> Round system with kill quota formula and intermission</li>
+        <li><strong>[ADD]</strong> Runner enemy — last survivor converts to faster runner from round 2</li>
+        <li><strong>[ADD]</strong> Enemy HP scaling +15% per round</li>
+        <li><strong>[ADD]</strong> Score system — persisted solo leaderboard, LAN summary on game over</li>
+      </ul>
+
+      <h2>v1.0.0a_MP</h2>
+      <h3>LAN Multiplayer Foundation</h3>
+      <ul>
+        <li><strong>[ADD]</strong> LAN multiplayer via Godot 4 high-level API — host/join lobby, up to 4 players</li>
+        <li><strong>[ADD]</strong> MultiplayerSpawner for enemies, projectiles, and players</li>
+      </ul>
+
+      <h2>v0.0a</h2>
+      <h3>Conceptualization</h3>
+      <ul>
+        <li><strong>[ADD]</strong> Core concept — sentient AI-powered vacuum, top-down zombie horde</li>
+        <li><strong>[ADD]</strong> Godot 4 project scaffolded — GDScript, Android target</li>
+      </ul>
+
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrapper">
+    &copy; 2026 SuckItZombies.com &nbsp;//&nbsp; Built in Godot 4 &nbsp;//&nbsp; Android
+  </div>
+</footer>
+
+</body>
+</html>
