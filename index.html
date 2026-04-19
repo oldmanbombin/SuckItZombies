@@ -96,12 +96,59 @@
 
   .hero-subtitle {
     font-family: 'Share Tech Mono', monospace;
-    font-size: clamp(0.75rem, 2vw, 1rem);
+    font-size: clamp(0.6rem, 1.4vw, 0.8rem);
     color: var(--blood);
     letter-spacing: 0.3em;
     text-transform: uppercase;
     margin-top: 8px;
-    text-shadow: 1px 1px 2px #000;
+    text-shadow:
+      2px 2px 0 #000,
+      -2px -2px 0 #000,
+      2px -2px 0 #000,
+      -2px 2px 0 #000,
+      0 2px 0 #000,
+      0 -2px 0 #000,
+      2px 0 0 #000,
+      -2px 0 0 #000;
+  }
+
+  /* ---- REPORT BUG BUTTON ---- */
+  .bug-report-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+
+  .bug-report-btn {
+    display: inline-block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--blood);
+    background: transparent;
+    border: 2px solid var(--blood);
+    padding: 10px 24px;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow:
+      0 0 10px rgba(107,0,0,0.3),
+      inset 0 0 10px rgba(107,0,0,0.1);
+    transition: background 0.15s, color 0.15s, box-shadow 0.15s, transform 0.15s;
+  }
+
+  .bug-report-btn:hover {
+    background: rgba(107,0,0,0.2);
+    box-shadow:
+      0 0 20px rgba(107,0,0,0.6),
+      inset 0 0 15px rgba(107,0,0,0.2);
+    transform: translate(-1px, -1px);
+  }
+
+  .bug-report-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
   }
 
   /* ---- DIVIDER ---- */
@@ -383,6 +430,9 @@
   <section class="hero">
     <h1 class="hero-title">Suck it,<br>Zombies!</h1>
     <p class="hero-subtitle">// top-down horde survival // android //</p>
+    <div class="bug-report-wrap">
+      <button class="bug-report-btn" id="bugBtn">Report a Bug</button>
+    </div>
   </section>
 
   <div class="divider"><span class="divider-icon">&#9632;</span></div>
@@ -399,7 +449,7 @@
     <div class="description">
       <p><strong>Suck it, Zombies!</strong> is a top-down horde survival game where you play as a robotic vacuum fighting for your life against an ever-growing zombie outbreak.</p>
       <p>Survive wave after wave of the undead solo or team up with up to 4 friends via LAN multiplayer.</p>
-      <p>Scavenge the map for weapons and power-ups — pistols, shotguns, rifles, and more.</p>
+      <p>Scavenge the map for weapons and power-ups -- pistols, shotguns, rifles, and more.</p>
       <p>Deploy drones, drop MeatBombs, unleash black holes, and hypnotize enemies into fighting for your side.</p>
       <p>Between rounds, hit the Armory to upgrade your loadout and push deeper into the horde.</p>
       <p>Multiple maps, a brutal Hard Mode, and a high score system to prove you've still got it.</p>
@@ -417,29 +467,43 @@
   </div>
 
 <script>
-  const btn = document.getElementById('emailBtn');
+  var emailBtn = document.getElementById('emailBtn');
+  var bugBtn = document.getElementById('bugBtn');
 
   function scaleBtn() {
-    btn.style.transform = 'scale(1)';
-    var wrap = btn.parentElement;
-    var ratio = wrap.offsetWidth / btn.offsetWidth;
-    if (ratio < 1) btn.style.transform = 'scale(' + ratio + ')';
+    emailBtn.style.transform = 'scale(1)';
+    var wrap = emailBtn.parentElement;
+    var ratio = wrap.offsetWidth / emailBtn.offsetWidth;
+    if (ratio < 1) emailBtn.style.transform = 'scale(' + ratio + ')';
   }
   window.addEventListener('resize', scaleBtn);
   window.addEventListener('load', scaleBtn);
   scaleBtn();
 
   var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
   if (!isMobile) {
-    btn.addEventListener('click', function(e) {
+    emailBtn.addEventListener('click', function(e) {
       e.preventDefault();
       navigator.clipboard.writeText('OldManBOMBIN@SuckItZombies.com').then(function() {
-        var orig = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(function() { btn.textContent = orig; scaleBtn(); }, 2000);
+        var orig = emailBtn.textContent;
+        emailBtn.textContent = 'Copied!';
+        setTimeout(function() { emailBtn.textContent = orig; scaleBtn(); }, 2000);
       });
     });
   }
+
+  bugBtn.addEventListener('click', function() {
+    if (!isMobile) {
+      navigator.clipboard.writeText('Bugs@SuckItZombies.com').then(function() {
+        var orig = bugBtn.textContent;
+        bugBtn.textContent = 'Copied!';
+        setTimeout(function() { bugBtn.textContent = orig; }, 2000);
+      });
+    } else {
+      window.location.href = 'mailto:Bugs@SuckItZombies.com';
+    }
+  });
 </script>
   </section>
 
@@ -452,13 +516,13 @@
       <h2>v3.3a</h2>
       <h3>Enemy Damage Rework + Hypno Ally Fix + Accessibility Pass + Z-Index Audit</h3>
       <ul>
-        <li><strong>[ADD]</strong> Enemy contact_damage stat added to enemies.json per type — damage no longer stored on player; hard mode 1.5x multiplier applied enemy-side</li>
-        <li><strong>[ADD]</strong> Hypno ally attack loop rewritten to _process-based timer — eliminates silent coroutine failure bug</li>
+        <li><strong>[ADD]</strong> Enemy contact_damage stat added to enemies.json per type -- damage no longer stored on player; hard mode 1.5x multiplier applied enemy-side</li>
+        <li><strong>[ADD]</strong> Hypno ally attack loop rewritten to _process-based timer -- eliminates silent coroutine failure bug</li>
         <li><strong>[ADD]</strong> Hypno ally damage and speed now inherit from source enemy type</li>
         <li><strong>[ADD]</strong> Full z-index hierarchy established across all scenes/scripts; dynamic swap on dash</li>
-        <li><strong>[ADD]</strong> Accessibility pass — mutant enemies recolored magenta; drone life bar blue to orange; armory owned tint gold; lobby color dots with letter designators</li>
+        <li><strong>[ADD]</strong> Accessibility pass -- mutant enemies recolored magenta; drone life bar blue to orange; armory owned tint gold; lobby color dots with letter designators</li>
         <li><strong>[FIX]</strong> HIT_DAMAGE removed from PlayerBasics.gd and player_attributes.json</li>
-        <li><strong>[FIX]</strong> FMJ _fmj_hit_enemies.append() unreachable after continue — enemies now correctly tracked per projectile lifetime</li>
+        <li><strong>[FIX]</strong> FMJ _fmj_hit_enemies.append() unreachable after continue -- enemies now correctly tracked per projectile lifetime</li>
         <li><strong>[TWEAK]</strong> Drone/bomb armory upgrade labels changed to Mk.II/III/IV</li>
         <li><strong>[TWEAK]</strong> MeatBomb Mk.II description updated to reflect actual damage behavior</li>
       </ul>
@@ -466,16 +530,16 @@
       <h2>v3.2.8a</h2>
       <h3>Drone Life Meter + Intermission Hold Block + Manual Reload + High Score Round Display</h3>
       <ul>
-        <li><strong>[ADD]</strong> Drone life meter — color-shifting bar (green to yellow to red) floats above each drone; MP owner-only</li>
-        <li><strong>[ADD]</strong> Intermission hold-block — next-round start defers until armory button is released</li>
-        <li><strong>[ADD]</strong> WeaponDoll tap-to-reload — tapping the weapon doll area instantly reloads; cancels auto-reload</li>
+        <li><strong>[ADD]</strong> Drone life meter -- color-shifting bar (green to yellow to red) floats above each drone; MP owner-only</li>
+        <li><strong>[ADD]</strong> Intermission hold-block -- next-round start defers until armory button is released</li>
+        <li><strong>[ADD]</strong> WeaponDoll tap-to-reload -- tapping the weapon doll area instantly reloads; cancels auto-reload</li>
         <li><strong>[ADD]</strong> High score screen now records and displays round reached</li>
       </ul>
 
       <h2>v3.2.7a</h2>
       <h3>Crawlers + UI Polish + QoL</h3>
       <ul>
-        <li><strong>[ADD]</strong> Crawler enemy — bomb-damaged but surviving enemies convert to crawlers</li>
+        <li><strong>[ADD]</strong> Crawler enemy -- bomb-damaged but surviving enemies convert to crawlers</li>
         <li><strong>[ADD]</strong> "Armory Available!" banner pulses on intermission start</li>
         <li><strong>[ADD]</strong> Armory button blue glow pulse during intermission</li>
         <li><strong>[TWEAK]</strong> Item drop lifetime +2s in easy mode</li>
@@ -494,13 +558,13 @@
       <h2>v3.2.4a</h2>
       <h3>Dash Trail</h3>
       <ul>
-        <li><strong>[ADD]</strong> Dash trail visual — DashTrail.png flashes at dash origin on each dash, fading over dash duration</li>
+        <li><strong>[ADD]</strong> Dash trail visual -- DashTrail.png flashes at dash origin on each dash, fading over dash duration</li>
       </ul>
 
       <h2>v3.2.2a</h2>
       <h3>Inventory Persistence + Bug Fixes</h3>
       <ul>
-        <li><strong>[ADD]</strong> user://inventory.json — stores equipped ability across sessions; wiped by Reset Data</li>
+        <li><strong>[ADD]</strong> user://inventory.json -- stores equipped ability across sessions; wiped by Reset Data</li>
         <li><strong>[FIX]</strong> Armory unlocks not applied at game start</li>
         <li><strong>[FIX]</strong> _meat_bomb_active stuck true when round ended with a live bomb</li>
       </ul>
@@ -508,14 +572,14 @@
       <h2>v3.2.1a</h2>
       <h3>Code Audit + Reload Sound System</h3>
       <ul>
-        <li><strong>[ADD]</strong> Reload sound system — 3 tiers based on upgrade state</li>
+        <li><strong>[ADD]</strong> Reload sound system -- 3 tiers based on upgrade state</li>
         <li><strong>[FIX]</strong> Dead variables and orphaned functions removed across multiple scripts</li>
       </ul>
 
       <h2>v3.2a</h2>
       <h3>Music Overhaul + Pause Menu Audio Controls</h3>
       <ul>
-        <li><strong>[ADD]</strong> Per-round playlist — one shuffled track per round, looping until round ends</li>
+        <li><strong>[ADD]</strong> Per-round playlist -- one shuffled track per round, looping until round ends</li>
         <li><strong>[ADD]</strong> Dedicated armory music with crossfade on entry/exit</li>
         <li><strong>[ADD]</strong> Music and SFX volume buttons on pause menu</li>
         <li><strong>[ADD]</strong> Prev/Next track skip buttons on pause menu</li>
@@ -532,7 +596,7 @@
       <h2>v3.0a</h2>
       <h3>The Armory</h3>
       <ul>
-        <li><strong>[ADD]</strong> Full Armory — Attachments, Abilities, and Accoutrement upgrade categories with persistent unlocks</li>
+        <li><strong>[ADD]</strong> Full Armory -- Attachments, Abilities, and Accoutrement upgrade categories with persistent unlocks</li>
         <li><strong>[ADD]</strong> Armory accessible during intermission via hold-to-open on WeaponSwapButton</li>
         <li><strong>[ADD]</strong> $1 per-kill reward on every enemy death</li>
         <li><strong>[TWEAK]</strong> MeatBomb reworked to HP damage scaling with armory tier</li>
@@ -541,31 +605,31 @@
       <h2>v2.3a</h2>
       <h3>Drone + Dustbin Integration</h3>
       <ul>
-        <li><strong>[ADD]</strong> Drone item — orbit/follow mode, engage/attack mode, 10-kill expiration</li>
-        <li><strong>[ADD]</strong> Dustbin mystery box — MeatBomb and Drone added to reel pool</li>
+        <li><strong>[ADD]</strong> Drone item -- orbit/follow mode, engage/attack mode, 10-kill expiration</li>
+        <li><strong>[ADD]</strong> Dustbin mystery box -- MeatBomb and Drone added to reel pool</li>
       </ul>
 
       <h2>v2.2a</h2>
       <h3>Round System + Scoring + Economy</h3>
       <ul>
         <li><strong>[ADD]</strong> Round system with kill quota formula and intermission</li>
-        <li><strong>[ADD]</strong> Runner enemy — last survivor converts to faster runner from round 2</li>
+        <li><strong>[ADD]</strong> Runner enemy -- last survivor converts to faster runner from round 2</li>
         <li><strong>[ADD]</strong> Enemy HP scaling +15% per round</li>
-        <li><strong>[ADD]</strong> Score system — persisted solo leaderboard, LAN summary on game over</li>
+        <li><strong>[ADD]</strong> Score system -- persisted solo leaderboard, LAN summary on game over</li>
       </ul>
 
       <h2>v1.0.0a_MP</h2>
       <h3>LAN Multiplayer Foundation</h3>
       <ul>
-        <li><strong>[ADD]</strong> LAN multiplayer via Godot 4 high-level API — host/join lobby, up to 4 players</li>
+        <li><strong>[ADD]</strong> LAN multiplayer via Godot 4 high-level API -- host/join lobby, up to 4 players</li>
         <li><strong>[ADD]</strong> MultiplayerSpawner for enemies, projectiles, and players</li>
       </ul>
 
       <h2>v0.0a</h2>
       <h3>Conceptualization</h3>
       <ul>
-        <li><strong>[ADD]</strong> Core concept — sentient AI-powered vacuum, top-down zombie horde</li>
-        <li><strong>[ADD]</strong> Godot 4 project scaffolded — GDScript, Android target</li>
+        <li><strong>[ADD]</strong> Core concept -- sentient AI-powered vacuum, top-down zombie horde</li>
+        <li><strong>[ADD]</strong> Godot 4 project scaffolded -- GDScript, Android target</li>
       </ul>
 
     </div>
