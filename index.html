@@ -402,7 +402,22 @@
   <section class="cta-section">
     <p class="cta-label">Join the Closed Test</p>
     <p class="cta-sub">Contact us to request access.</p>
-    <a class="cta-email" href="mailto:OldManBOMBIN@SuckItZombies.com">OldManBOMBIN@SuckItZombies.com</a>
+    <a class="cta-email" id="emailBtn" href="mailto:OldManBOMBIN@SuckItZombies.com">OldManBOMBIN@SuckItZombies.com</a>
+
+<script>
+  const btn = document.getElementById('emailBtn');
+  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  if (!isMobile) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      navigator.clipboard.writeText('OldManBOMBIN@SuckItZombies.com').then(function() {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(function() { btn.textContent = orig; }, 2000);
+      });
+    });
+  }
+</script>
   </section>
 
   <div class="divider"><span class="divider-icon">&#9632;</span></div>
