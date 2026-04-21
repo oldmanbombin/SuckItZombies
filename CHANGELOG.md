@@ -1,6 +1,17 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.3.2a
+### INITIALS INPUT FIX + Z-INDEX PATCH + TUTORIAL ICONS
+- **[ADD]** Pickup icons baked into tutorial popup images — players can now visually identify cash, health, bomb, and drone pickups from the tutorial overlay
+- **[FIX]** Initials input unresponsive on game over screen until Return was pressed first — root cause: focus and keyboard deferred behind `_user_initiated` gate requiring an explicit touch event; fixed by grabbing focus and calling `DisplayServer.virtual_keyboard_show()` immediately in `_ready()` when score qualifies; `_user_initiated` flag and `_on_initials_input_gui_input` removed entirely
+- **[ADD]** Initials field pre-fills with last submitted initials for the session — `GameManager.last_initials` set on each `save_solo_score()` call; field text selected on open so typing immediately replaces it
+- **[FIX]** Player sprite rendering above Map002 cabin/shed rooftops — z-index values on occluding structures corrected in Map002.tscn; player now renders below rooftop layer as intended
+
+## v3.3.1a
+### PICKUP SUCTION SYSTEM
+- **[ADD]** Pickup suction — cash, health, meat bomb, and drone pickups magnetically attract toward nearby players within 500 units; attraction gates match collection gates (cash always, health if below max HP, bomb/drone only if the other item type is in slot); speed scales from 100 to 800 units/sec as distance closes; suction sound (PlayerMovement.mp3 pitched up) plays on attraction start and stops on collection or release
+
 ## v3.3a
 ### ENEMY DAMAGE REWORK + HYPNO ALLY FIX + ACCESSIBILITY PASS + Z-INDEX AUDIT
 - **[ADD]** Enemy `contact_damage` stat added to `enemies.json` per type — damage no longer stored on player; hard mode 1.5x multiplier applied enemy-side
@@ -675,4 +686,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-17 (v3.3a)_
+_Changelog updated 2026-04-20 (v3.3.2a)_
