@@ -1,6 +1,21 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.3.3a
+### CONTROLLER SUPPORT PASS
+- **[FIX]** B on Main Menu now correctly quits the game — was reloading the menu instead of calling `get_tree().quit()`
+- **[FIX]** Popups now absorb all controller input when visible — focus grabbed on open via `_process` timer to win the deferred focus race; `ControllerInput._unhandled_input` guards per popup block all bleed-through; B closes, A navigates Next/Close, focus restored to appropriate button after dismiss
+- **[FIX]** B blocked on tutorial armory tip (no-button tip forcing player toward the armory) — guard checks `CloseButton.visible` before allowing B to fire `_on_close()`
+- **[ADD]** Armory D-pad up at top of item list shifts focus to Back button (yellow tint); D-pad down returns to top of list; A activates Back when focused — works in both regular and tutorial armory
+- **[FIX]** Tutorial armory D-pad up to Back button blocked until laser is purchased
+- **[FIX]** All non-laser purchases blocked in tutorial armory — play Unable.mp3 and show "Purchase the Laser Sight first!"; covers both touch and controller paths
+- **[FIX]** Laser panel pre-selected on tutorial armory entry — highlight, desc, and cost populated immediately; A purchases in one press
+- **[FIX]** Tutorial armory controller navigation locked correctly — LB/RB, D-pad left/right, and B blocked; D-pad up/down and A pass through to normal handlers
+- **[FIX]** Armory marks joypad events as handled via `set_input_as_handled()` — prevents `ControllerInput` double-processing controller input in armory scene
+- **[ADD]** `XBoxButtonsPopUp` — shows `XBoxButtons.png` at 80% viewport scale before Controller tips phase 1; skipped if no controller connected or already seen
+- **[ADD]** `ArmoryControllerPopUp` — shows `ArmoryControllerPopUp.png` at 80% viewport scale before Armory tips; skipped if no controller connected or already seen
+- **[ADD]** Translucent black backdrop added to all five popup scenes
+
 ## v3.3.2a
 ### INITIALS INPUT FIX + Z-INDEX PATCH + TUTORIAL ICONS
 - **[ADD]** Pickup icons baked into tutorial popup images — players can now visually identify cash, health, bomb, and drone pickups from the tutorial overlay
@@ -686,4 +701,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-20 (v3.3.2a)_
+_Changelog updated 2026-04-25 (v3.3.3a)_
