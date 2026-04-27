@@ -1,6 +1,27 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.3.4a
+### CONTROLLER HUD + MENU NAVIGATION FIXES
+
+- **[ADD]** Controller HUD -- display-only HUD for physical controller play; auto-shows when controller connected, hides when disconnected; touch overlay hides when controller is active
+- **[ADD]** Controller HUD left panel: player doll (animated, skinned, health bar), dash cooldown indicator, ability indicator (Push-Back / Smash / Hypno-Ray text swaps visibility)
+- **[ADD]** Controller HUD right panel: weapon doll (weapon image, ammo bar, ammo count), item slot (Drone/MeatBomb icon with blank overlay), Armory Available flash
+- **[ADD]** Controller HUD contextual elements: Interact prompt (near AND affordable only), Armory Available flash matching touch banner formula
+- **[ADD]** Controller HUD: cooldown fill animations for dash and ability copied exactly from DashButton.gd and SecondaryAbilityButton.gd; CooldownCompletePlayer audio node wired
+- **[ADD]** Controller HUD: HP bar scaled to fit left panel; score and currency labels reposition below item slot when controller connected, restore original positions when disconnected
+- **[ADD]** `GameManager.using_controller` flag -- set true/false by ControllerInput on joypad connect/disconnect
+- **[ADD]** `GameManager.gameplay_blocked` flag -- set true when pause or inventory menu is open, false on close
+- **[ADD]** Full-screen InputBlocker Control node in SiZ_Game CanvasLayer -- absorbs touch input behind any open menu/popup
+- **[FIX]** All controller button presses in menus now consumed via `_consume_btn()` -- START, BACK, B scene-navigation, and A menu actions no longer bleed through to gameplay
+- **[FIX]** Dash and ability cooldown timers now pause-aware -- `create_timer` pause_mode_process corrected to false on DashButton, SecondaryAbilityButton, and ControllerHUD
+- **[FIX]** Map select focus outline correct size -- scene-space overlay Panel approach bypasses Godot StyleBox scaling issue with 0.189x-scaled buttons
+- **[FIX]** Sprite select and map select focus outlines now identical -- same color, same size, same overlay Panel approach; default Godot focus ring suppressed on both screens
+- **[FIX]** Sprite select unselected buttons now dim to 60% matching map select tint behavior
+- **[FIX]** Pause menu D-pad navigation no longer skips buttons -- `_unhandled_input` dpad handler uses `focus_neighbor_*` directly; redundant `_handle_menu_navigation` removed
+
+---
+
 ## v3.3.3a
 ### CONTROLLER SUPPORT PASS
 - **[FIX]** B on Main Menu now correctly quits the game — was reloading the menu instead of calling `get_tree().quit()`
@@ -701,4 +722,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-25 (v3.3.3a)_
+_Changelog updated 2026-04-27 (v3.3.4a)_
