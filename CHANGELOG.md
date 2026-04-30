@@ -1,6 +1,31 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v3.4a
+### SET CONTROLS SCREEN + CONTROLLER POLISH + WORLD EFFECTS + EARLY GAME BALANCE
+
+- **[ADD]** Set Controls screen -- D-pad navigable remapping screen; focus ring appears on all asterisked nodes; hover label shows action name above focused button; accessible via controller icon button on menus
+- **[ADD]** Controller icon button on main menu and game menus -- appears when controller is connected, navigates to Set Controls screen
+- **[ADD]** World-edge fog -- animated noise, two-tone grey-green cloud effect masks map borders
+- **[ADD]** Enemy spawn puff -- dirt cloud VFX plays at spawn point before enemy appears
+- **[ADD]** Laser sight active by default in round 0 at 25% beam length
+- **[FIX]** Controller buttons unresponsive after game-over restart -- button signal connections not re-established on scene reload; fixed
+- **[FIX]** Inventory menu now accepts controller input and D-pad navigation after game-over restart
+- **[FIX]** Pushback and Hypnoray cooldown animations now trigger correctly on controller HUD
+- **[FIX]** Ability button showing doubled text in controller HUD
+- **[FIX]** High score initials input unresponsive after controller connected -- controller was stealing focus before player could type
+- **[FIX]** Pause menu touch buttons broken -- input blocker was in wrong position in scene tree
+- **[FIX]** Focus outlines appearing on all buttons when no controller is connected (9 locations across popups and menus)
+- **[FIX]** Focus ring not appearing when controller connected mid-session
+- **[FIX]** Focus ring not disappearing when controller disconnected mid-session
+- **[FIX]** X button showing quit dialog on touch -- was firing both touch and controller quit paths simultaneously
+- **[FIX]** B / Go Back on Set Controls screen was triggering quit dialog instead of closing the screen
+- **[TWEAK]** "Laser Sight" armory item renamed to "Enhanced Laser Sight" -- purchasing restores laser to full beam length
+- **[TWEAK]** Enemy movement speed and spawn rates reduced for rounds 1-5
+- **[TWEAK]** Cash drop rates increased for rounds 1-5
+
+---
+
 ## v3.3.4a
 ### CONTROLLER HUD + MENU NAVIGATION FIXES
 
@@ -722,4 +747,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-04-27 (v3.3.4a)_
+_Changelog updated 2026-04-29 (v3.4a)_
