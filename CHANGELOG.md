@@ -1,6 +1,27 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v1.1
+### CONTROLLER SUPPORT + STAT TRACKING + UI IMPROVEMENTS
+
+- **[ADD]** Intermission skip button -- progress bar now displays "SKIP >>" and is tappable by the host (solo) or server (MP); skips remaining drain and ends intermission immediately; LB on controller (remappable)
+- **[ADD]** Per-run stat tracking -- shots fired, kills by weapon, HP lost, heals picked up, bombs used, drones used, cash earned, cash spent tracked each run; hard mode flag and round number included in saved entry
+- **[ADD]** Score screen stat overlay -- tapping any high score entry opens a detailed stats panel; shows mode, round, score, kills, favorite weapon, shots fired, HP lost, heals, bombs, drones, cash earned/spent; controller navigable (A to open, B or X to close); old entries show "--"
+- **[ADD]** Hard mode indicator on high score screen -- entries show R:3(H) for hard mode runs
+- **[ADD]** Player outline above fog -- Line2D circle at z_index 21 renders above fog layer; appears when player drifts past 200 units from screen center; replaces shader-based outline system for both solo and MP
+- **[ADD]** Skip Intermission added to controller remapping screen -- LB default, remappable alongside all other controls
+- **[FIX]** Quit confirmation dialog now appears for all users; scene-level direct connection to quit_game removed -- was firing alongside show_quit_warning causing instant quit
+- **[FIX]** Controller set controls screen -- remapping now works when opened from main menu; thumbstick assignment fixed; axis capture no longer bleeds through to menu navigation during listen mode
+- **[FIX]** Controller armory controls screen -- back button and B no longer crash when opened from main menu
+- **[FIX]** Hard mode warning overlay blocks controller input and restores focus on close
+- **[FIX]** Score stat overlay blocks controller d-pad navigation from reaching buttons behind it; focus restores to source score on close
+- **[FIX]** Any joypad press with no focused node on game over screen snaps focus back to Play Again
+- **[FIX]** Tutorial armory button overlay hidden when using controller
+- **[FIX]** Armory Available banner appears above tutorial popup backdrop for controller users
+- **[FIX]** skip_intermission key added to controller_map defaults -- fixes "Button -1" label on remapping screen
+
+---
+
 ## v1.0
 ### PRODUCTION RELEASE
 - **[ADD]** Tester credits screen -- forward arrow on credits screen cycles to a second page listing alpha testers; arrow returns to main credits
@@ -731,4 +752,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-05-04 (v1.0)_
+_Changelog updated 2026-05-10 (v1.1)_
