@@ -1,6 +1,25 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v1.1.1
+### BUG FIXES + BLACK HOLE GUN OVERHAUL
+
+- **[FIX]** `FocusHighlight` now suppresses focus ring at the source when no controller is connected; ring cannot appear from touch or any other input in touch-only mode
+- **[FIX]** `FOCUS_ALL` gated on `using_controller` across all scenes missing the check: solo game over, LAN game over, credits, map select, multiplayer lobby, set controls, set armory controls, sprite select confirm button
+- **[FIX]** `initials_input` focus mode hardcoded to `FOCUS_ALL` so the field is always tappable regardless of controller state
+- **[FIX]** Duplicate scene-level signal connections removed from `MainMenu.tscn`; Play, LAN, and Quit buttons were connecting twice, causing potential scene change race condition on slower devices
+- **[FIX]** Cash Spent stat now tracks wallbuy and dustbin purchases in addition to armory spending
+- **[FIX]** Cash Earned stat now tracks kill rewards
+- **[FIX]** Dustbin solo refund path corrected; was directly mutating currency instead of routing through `deduct_currency()`
+- **[NEW]** BHG singularity pull radius capped at 1500 units; enemies beyond this are completely unaffected
+- **[NEW]** BHG pull force now scales with distance -- near-zero at the outer edge, ramping up sharply toward the singularity center; minimum floor of 250 u/s ensures enemies cannot walk away from the field
+- **[NEW]** BHG pull force increased 2.5x
+- **[NEW]** BHG singularity now displays faint rotating galaxy arms filling the full area of effect, communicating pull strength visually
+- **[NEW]** BHG singularity displays a faint pulsing boundary ring at the edge of the pull field
+- **[FIX]** BHG projectile now correctly triggers singularity on glancing hits; previously could deflect off enemies without activating
+
+---
+
 ## v1.1
 ### CONTROLLER SUPPORT + STAT TRACKING + UI IMPROVEMENTS
 
@@ -752,4 +771,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-05-10 (v1.1)_
+_Changelog updated 2026-05-17 (v1.1.1)_
