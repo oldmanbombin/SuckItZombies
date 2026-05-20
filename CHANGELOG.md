@@ -1,6 +1,18 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v1.1.2
+### BUG FIXES + ENEMY BEHAVIOUR
+
+- **[FIX]** All `FileAccess` handles in `GameManager` now explicitly closed after read/write operations; unclosed handles were causing save data corruption on Android after multiple sessions, manifesting as initials input failing after 2-3 uses
+- **[FIX]** Spawn puff particle effect now freed on enemy death; previously the effect would play at the spawn position even after the enemy had already been killed, creating ghost puffs when the camera reached that area
+- **[FIX]** `nav_agent.avoidance_enabled = false` was hardcoded in `basic_enemy._ready()`, silently overriding all NavigationAgent2D avoidance settings set in the editor
+- **[FIX]** Enemy `CharacterBody2D` rotation is now locked, preventing the physics engine from spinning enemies during collision resolution
+- **[FIX]** Stationary enemies are position-locked after `move_and_slide` so they cannot be launched by a moving enemy walking into them
+- **[FIX]** Enemies now slow and hard-stop before their collision shapes can touch; approach-only movement is throttled while movement away from other enemies remains unrestricted, allowing enemies to disperse freely when chasing a player
+
+---
+
 ## v1.1.1
 ### BUG FIXES + BLACK HOLE GUN OVERHAUL
 
@@ -771,4 +783,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-05-17 (v1.1.1)_
+_Changelog updated 2026-05-20 (v1.1.2)_
