@@ -27,7 +27,6 @@
     overflow-x: hidden;
   }
 
-  /* Mottled blood texture background */
   body::before {
     content: '';
     position: fixed;
@@ -42,7 +41,6 @@
     z-index: 0;
   }
 
-  /* Blob/vein pattern overlay */
   body::after {
     content: '';
     position: fixed;
@@ -63,7 +61,6 @@
     padding: 0 24px;
   }
 
-  /* ---- HERO ---- */
   .hero {
     position: relative;
     padding: 60px 0 40px;
@@ -112,7 +109,6 @@
       -2px 0 0 #000;
   }
 
-  /* ---- REPORT BUG BUTTON ---- */
   .bug-report-wrap {
     display: flex;
     justify-content: center;
@@ -151,7 +147,6 @@
     box-shadow: none;
   }
 
-  /* ---- DIVIDER ---- */
   .divider {
     display: flex;
     align-items: center;
@@ -169,7 +164,6 @@
     font-size: 1.2rem;
   }
 
-  /* ---- VIDEO ---- */
   .video-section {
     margin-bottom: 16px;
   }
@@ -193,28 +187,88 @@
     border: none;
   }
 
-  /* ---- DESCRIPTION ---- */
-  .description {
+  /* ---- OVERVIEW SECTION ---- */
+  .overview {
+    margin: 40px 0;
+  }
+
+  .overview-intro {
     background: rgba(0,0,0,0.45);
     border-left: 3px solid var(--green);
     padding: 28px 32px;
-    margin: 40px 0;
-    box-sizing: border-box;
+    margin-bottom: 32px;
     box-shadow: inset 0 0 40px rgba(0,0,0,0.3);
   }
 
-  .description p {
+  .overview-intro p {
     font-size: clamp(0.9rem, 2vw, 1.05rem);
     line-height: 1.85;
     color: #ccc;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
-  .description p:last-child { margin-bottom: 0; }
+  .overview-intro p:last-child { margin-bottom: 0; }
+  .overview-intro strong { color: var(--green-bright); font-weight: normal; }
+  .overview-intro em { color: #bbb; font-style: italic; }
 
-  .description strong {
-    color: var(--green-bright);
-    font-weight: normal;
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
   }
+
+  @media (max-width: 600px) {
+    .overview-grid { grid-template-columns: 1fr; }
+  }
+
+  .overview-card {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(107,0,0,0.35);
+    padding: 22px 24px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+  }
+
+  .overview-card-full {
+    grid-column: 1 / -1;
+  }
+
+  .overview-card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    color: var(--green);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(74,191,58,0.3);
+    margin-bottom: 14px;
+  }
+
+  .overview-card p {
+    font-size: 0.87rem;
+    line-height: 1.8;
+    color: #aaa;
+    margin-bottom: 10px;
+  }
+  .overview-card p:last-child { margin-bottom: 0; }
+  .overview-card strong { color: var(--green-bright); font-weight: normal; }
+  .overview-card em { color: #bbb; font-style: italic; }
+
+  .overview-closing {
+    margin-top: 32px;
+    background: rgba(0,0,0,0.3);
+    border-top: 1px solid rgba(107,0,0,0.3);
+    border-bottom: 1px solid rgba(107,0,0,0.3);
+    padding: 28px 32px;
+    text-align: center;
+  }
+
+  .overview-closing p {
+    font-size: 0.9rem;
+    line-height: 1.9;
+    color: #999;
+    margin-bottom: 8px;
+  }
+  .overview-closing p:last-child { margin-bottom: 0; }
+  .overview-closing strong { color: var(--green-bright); font-weight: normal; }
+  .overview-closing em { color: #ccc; font-style: italic; }
 
   /* ---- CTA ---- */
   .cta-section {
@@ -367,7 +421,6 @@
     letter-spacing: 0.05em;
   }
 
-  /* ---- FOOTER ---- */
   footer {
     border-top: 1px solid rgba(107,0,0,0.3);
     padding: 24px 0;
@@ -377,7 +430,6 @@
     letter-spacing: 0.15em;
   }
 
-  /* ---- SCAN LINE EFFECT ---- */
   .scanlines {
     position: fixed;
     inset: 0;
@@ -417,22 +469,81 @@
 
   <div class="divider"><span class="divider-icon">&#9632;</span></div>
 
-  <section>
-    <div class="description">
-      <p><strong>Suck it, Zombies!</strong> is a top-down horde survival game; you play as a robotic vacuum, fighting for your life against an ever-growing zombie outbreak!</p>
-      <p>Survive wave after wave of the undead <strong>solo</strong>, or team up with <strong>up to 4 friends</strong> via <strong>LAN multiplayer</strong>!</p>
-      <p>Scavenge the map for weapons -- pistols, shotguns, rifles -- <strong>and more!</strong></p>
-      <p>Deploy <strong>drones</strong>, drop <strong>MeatBombs</strong>, unleash <strong>BlackHoles</strong>, and <strong>HypnoRay</strong> enemies into fighting for your side!</p>
-      <p>Between rounds, hit <strong>The Armory</strong> to upgrade your loadout and push deeper into the hordes!</p>
-      <p>Multiple maps, a brutal <strong>Hard Mode</strong>, and a high score system to prove you've still got it!</p>
+  <section class="overview">
+
+    <div class="overview-intro">
+      <p>You are a sentient robotic vacuum. There are zombies. You know what to do.</p>
+      <p><strong>Suck it, Zombies!</strong> is a top-down horde survival game built in the spirit of games like <em>Call of Duty Zombies</em> and <em>Zombie Estate</em> &mdash; round-based, increasingly brutal, and built around squeezing every last dollar out of a dying world to buy yourself one more upgrade. You can go it alone and see exactly how far your pride will carry you, or play with <strong>up to four players</strong> over local area network.</p>
     </div>
+
+    <div class="overview-grid">
+
+      <div class="overview-card">
+        <h3>// Picking Your Fighter</h3>
+        <p>Choose from <strong>four vacuum sprites</strong>, each with their own stat spread across speed, health, dash cooldown, and ability cooldown &mdash; displayed as a star rating on the selection screen. Then pick your map &mdash; currently <strong><em>Da Foyest</em></strong> and <strong><em>Da Cabean</em></strong> are available &mdash; and you're off.</p>
+      </div>
+
+      <div class="overview-card">
+        <h3>// Hard Mode</h3>
+        <p>One toggle on the map select screen. Enemies are faster, tougher, and less generous with drops. It&rsquo;s there if you want it. The High Score screen will note which runs were completed in <strong>Hard Mode</strong>.</p>
+      </div>
+
+      <div class="overview-card overview-card-full">
+        <h3>// The Arsenal</h3>
+        <p>Three weapons are available during a run: the <strong>Mosin</strong> rifle, the <strong>Shotgun</strong>, and the <strong>1911 pistol</strong>. Purchase them from <strong>Wall-Buy Stations</strong> positioned around the map. If you don&rsquo;t like what&rsquo;s on the wall, try your luck at the <strong>Dustbin</strong> &mdash; a mystery box that spits out a random weapon for a flat fee. The weapon selection cycles through a slot-machine animation before landing on your prize. Could be great. Could be a wet noodle. That&rsquo;s the game.</p>
+        <p>And then there&rsquo;s the <strong>Black Hole Gun</strong>. The BHG is only available through the Dustbin. Fire it and a singularity launches toward the nearest enemy, turns into a black hole on contact, and pulls every zombie within its area of effect toward the center. When enough enemies have been consumed, the singularity collapses. A visible pulsing boundary ring and faint rotating galaxy arms fill the field so you always know exactly how much real estate it&rsquo;s controlling. It&rsquo;s the best weapon in the game, and you will not always get it.</p>
+      </div>
+
+      <div class="overview-card overview-card-full">
+        <h3>// Spending Your Money</h3>
+        <p>Killing zombies drops cash &mdash; and occasionally health pickups. The <strong>Armory</strong> is accessible during intermission and organized into three categories: <strong>Attachments</strong> (per-weapon upgrades for each of the four guns), <strong>Accoutrement</strong> (player upgrades covering speed and dash, HP and damage reduction, and drone and bomb tiers &mdash; plus a cross-weapon Armament subcategory), and <strong>Abilities</strong> (tiered upgrades for your three special abilities). Unlocks are permanent for the run and carry forward through every subsequent round. New players get a guided tour of the Armory at the end of Round 0 before the real game begins.</p>
+      </div>
+
+      <div class="overview-card">
+        <h3>// Your Deployables</h3>
+        <p>The <strong>MeatBomb</strong> &mdash; a timed explosive that groups enemies together before detonating. The <strong>Drone</strong> &mdash; a deployable combat support unit that engages enemies autonomously. Both have upgrade tiers in the Armory.</p>
+      </div>
+
+      <div class="overview-card">
+        <h3>// Special Abilities</h3>
+        <p><strong>Pushback</strong> blasts nearby enemies away. <strong>Smash</strong> instantly kills the nearest enemies in range. <strong>HypnoRay</strong> converts enemies into temporary allies who fight for you until their kill quota runs out. Each has three purchasable upgrade tiers. You also have a <strong>Dash</strong> for getting out of tight spots &mdash; it can move you through some walls and kill enemies in your path.</p>
+      </div>
+
+      <div class="overview-card overview-card-full">
+        <h3>// The Horde</h3>
+        <p>The first few rounds are <strong>Basic Enemies</strong> only. By round three, <strong>Runners</strong> start appearing &mdash; faster and hitting more frequently. Round five brings <strong>Tanks</strong> &mdash; slower, much harder to kill, and progressively making up a larger share of each wave. Drop rates vary by kill method: bullets, bombs, drones, and the singularity each carry their own cash and health drop probabilities, tuned differently for normal and Hard Mode.</p>
+      </div>
+
+      <div class="overview-card">
+        <h3>// High Score &amp; Stat Tracking</h3>
+        <p>The game tracks your <strong>top ten scores</strong> locally. Each entry captures round reached, final score, and whether the run was in Hard Mode. Tap any entry to pull up a full stat breakdown &mdash; shots fired, favorite weapon, HP lost, heals collected, bombs used, drones used, cash earned and spent. Player data can be cleared by using the <strong>DiskBomb</strong> on the main menu.</p>
+      </div>
+
+      <div class="overview-card">
+        <h3>// Controller Support</h3>
+        <p>Full Bluetooth controller support with an <strong>Xbox controller layout</strong> &mdash; <strong>Xbox One controllers</strong> are confirmed compatible. All controls are remappable. Plug in a controller and the touch overlay swaps for a dedicated <strong>Controller HUD</strong> with side panels showing abilities, weapon, and item slots. Unplug and the touch interface comes right back.</p>
+      </div>
+
+      <div class="overview-card overview-card-full">
+        <h3>// Music &amp; Audio</h3>
+        <p>A curated soundtrack of <strong>Kevin MacLeod</strong> tracks. The menu runs on <em>Power Restored</em>, and five tracks shuffle during gameplay. Music and SFX volume are independently controllable &mdash; each cycles through mute, 50%, and 100% &mdash; and you can skip tracks from the pause menu. Settings persist between sessions.</p>
+      </div>
+
+    </div>
+
+    <div class="overview-closing">
+      <p>This game contains <strong>no ads</strong>, collects <strong>no data</strong>, and was made by a father for his son.</p>
+      <p>It was made for the love of gaming, and for gamers &mdash; for friends and roommates and lovers.</p>
+      <p><em>I hope you enjoy it. :-)</em></p>
+    </div>
+
   </section>
 
   <div class="divider"><span class="divider-icon">&#9632;</span></div>
 
   <section class="cta-section">
-    <p class="cta-label">Join the Closed Test</p>
-    <p class="cta-sub">Contact us to request access.</p>
+    <p class="cta-label">Join the Early Access</p>
+    <p class="cta-sub">Register for pre-release on Google Play for $5.</p>
     <div class="cta-email-wrap">
       <a class="cta-email" id="emailBtn" href="mailto:OldManBOMBIN@SuckItZombies.com">OldManBOMBIN@SuckItZombies.com</a>
     </div>
@@ -456,7 +567,6 @@
 </footer>
 
 <script>
-  // ---- EMAIL / BUG BUTTONS ----
   var emailBtn = document.getElementById('emailBtn');
   var bugBtn = document.getElementById('bugBtn');
 
@@ -495,9 +605,6 @@
     }
   });
 
-  // ---- CHANGELOG FETCH + PARSE ----
-  // Raw URL for CHANGELOG.md in the public GitHub repo.
-  // If the default branch is not 'main', change it here.
   var CHANGELOG_URL = 'https://raw.githubusercontent.com/oldmanbombin/SuckItZombies/main/CHANGELOG.md';
 
   function escapeHtml(str) {
@@ -509,7 +616,6 @@
   }
 
   function parseBold(str) {
-    // Convert **text** to <strong>text</strong>
     return str.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   }
 
@@ -521,20 +627,15 @@
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i];
 
-      // Skip the top-level h1 and the "Development Changelog" h2 header line
       if (/^# /.test(line)) continue;
       if (/^## Development Changelog/.test(line)) continue;
-      // Skip the footer timestamp line
       if (/^_Changelog updated/.test(line)) continue;
-      // Skip horizontal rules
       if (/^---/.test(line)) continue;
-      // Skip blank lines between items (handled by margins)
       if (line.trim() === '') {
         if (inList) { html += '</ul>\n'; inList = false; }
         continue;
       }
 
-      // ## version heading
       if (/^## /.test(line)) {
         if (inList) { html += '</ul>\n'; inList = false; }
         var ver = escapeHtml(line.replace(/^## /, '').trim());
@@ -542,7 +643,6 @@
         continue;
       }
 
-      // ### section heading
       if (/^### /.test(line)) {
         if (inList) { html += '</ul>\n'; inList = false; }
         var sec = escapeHtml(line.replace(/^### /, '').trim());
@@ -550,7 +650,6 @@
         continue;
       }
 
-      // - list item (may have nested detail lines starting with spaces -- flatten)
       if (/^- /.test(line)) {
         if (!inList) { html += '<ul>\n'; inList = true; }
         var item = line.replace(/^- /, '').trim();
@@ -558,9 +657,6 @@
         continue;
       }
 
-      // Indented continuation lines (detail bullets starting with spaces/underscores)
-      // These are the italicised root-cause notes in the full changelog -- skip them
-      // so the public-facing changelog stays readable without the internal detail.
       if (/^\s+/.test(line)) continue;
     }
 
