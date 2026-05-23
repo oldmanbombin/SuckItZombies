@@ -318,7 +318,7 @@
     transform-origin: center;
   }
   @media (max-width: 500px) {
-    .cta-email { font-size: 0.55rem; letter-spacing: 0.04em; padding: 14px 20px; }
+    .cta-email { font-size: 0.85rem; letter-spacing: 0.04em; padding: 14px 20px; }
   }
   .cta-email:hover {
     background: var(--green-bright);
@@ -542,10 +542,9 @@
   <div class="divider"><span class="divider-icon">&#9632;</span></div>
 
   <section class="cta-section">
-    <p class="cta-label">Join the Early Access</p>
-    <p class="cta-sub">Register for pre-release on Google Play for $5.</p>
+    <p class="cta-label">Join Early Access on Google Play for $5</p>
     <div class="cta-email-wrap">
-      <a class="cta-email" id="emailBtn" href="mailto:OldManBOMBIN@SuckItZombies.com">OldManBOMBIN@SuckItZombies.com</a>
+      <a class="cta-email" id="emailBtn" href="https://play.google.com/store/apps/details?id=com.BOMBIN.suck" target="_blank" rel="noopener">Visit the Store Page!</a>
     </div>
   </section>
 
@@ -567,31 +566,9 @@
 </footer>
 
 <script>
-  var emailBtn = document.getElementById('emailBtn');
   var bugBtn = document.getElementById('bugBtn');
 
-  function scaleBtn() {
-    emailBtn.style.transform = 'scale(1)';
-    var wrap = emailBtn.parentElement;
-    var ratio = wrap.offsetWidth / emailBtn.offsetWidth;
-    if (ratio < 1) emailBtn.style.transform = 'scale(' + ratio + ')';
-  }
-  window.addEventListener('resize', scaleBtn);
-  window.addEventListener('load', scaleBtn);
-  scaleBtn();
-
   var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-
-  if (!isMobile) {
-    emailBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      navigator.clipboard.writeText('OldManBOMBIN@SuckItZombies.com').then(function() {
-        var orig = emailBtn.textContent;
-        emailBtn.textContent = 'Address Copied!';
-        setTimeout(function() { emailBtn.textContent = orig; scaleBtn(); }, 2000);
-      });
-    });
-  }
 
   bugBtn.addEventListener('click', function() {
     if (!isMobile) {
