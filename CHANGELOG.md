@@ -1,6 +1,26 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v1.5
+### SPANISH TRANSLATION + BUG FIXES
+
+- **[ADD]** Full Spanish translation — all player-facing UI, menus, armory items and descriptions, weapon names, interactable labels, game over stats, controller remap screen, and warning popups; language toggles instantly via Eng/Esp button on main menu and persists across sessions
+- **[ADD]** `Translations.gd` autoload — central EN→ES dictionary with `_t()` helper; all translated strings route through a single source of truth
+- **[ADD]** `armory.json` and `weapons.json` extended with `label_es`, `desc_es`, and `display_name_es` fields for all translatable entries
+- **[ADD]** High scores screen accessible from main menu — displays full solo leaderboard with tappable stat overlays; identical layout to post-game screen minus the score entry panel and play again/quit buttons; back button returns to main menu
+- **[FIX]** Bluetooth audio devices and headsets no longer trigger controller mode — `_find_device()` now filters connected joypads by name against a blocklist of known audio device patterns; startup and per-frame checks both use the same filter
+- **[FIX]** FMJ pierce inconsistency — `check_collision()` now sorts all simultaneous collisions by distance before processing; nearest enemy always receives the full pierce chance first; previously `move_and_slide()` could return a behind enemy before the near one, consuming a pierce charge out of order
+- **[FIX]** Initials input field does not capture virtual keyboard on controller — field receives GUI focus immediately when the qualifies panel appears with a controller connected; keyboard input now routes correctly without requiring Return + re-tap
+- **[FIX]** LAN lobby player labels showed "Vac 1/2/3/4" — now display character names (Harry/Larry/Mary/Geri) matching the sprite select screen
+- **[FIX]** LAN lobby sprite/name labels misaligned in multiplayer layout — `_apply_mp_positions()` now repositions `SpriteLabel` nodes to follow their buttons
+- **[FIX]** LAN lobby player rows now have alternating subtle background tint for readability
+- **[FIX]** Sprite select stat labels (Speed, HP, Dash Cooldown, Ability Cooldown) now translate correctly in Spanish
+- **[FIX]** Language toggle did not update Version and LAN Multiplayer labels until scene reload — both labels re-applied on every toggle via `_apply_language_text()`
+- **[FIX]** `start_lobby()`, `start_game()`, `quit_game()`, and `_on_credits_pressed()` in `main.gd` now guard `get_tree()` calls after `await` with `is_inside_tree()` — prevents null tree crash on double-tap or rapid navigation
+- **[FIX]** Pause menu Leave Match and Quit Game buttons now centered correctly in Spanish
+
+---
+
 ## v1.1.2
 ### BUG FIXES + ENEMY BEHAVIOUR
 
@@ -783,4 +803,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-05-20 (v1.1.2)_
+_Changelog updated 2026-05-30 (v1.5)_
