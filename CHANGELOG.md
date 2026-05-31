@@ -1,6 +1,25 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v1.5.2
+### BUG FIXES + POLISH
+
+- **[FIX]** Quit warning popup fires immediately on tap — `ControllerInput.gd` had its own `show_quit_warning()` that called `quit_game()` directly when not using a controller, causing a double-connection on the Quit button; both now do a lazy popup lookup at call time
+- **[FIX]** Quit/Reset warning popups bypass touch propagation issue — `show_warning()` now defers visibility via `call_deferred` so the opening touch cannot simultaneously fire the Yes button; translations reapplied on every show so they update correctly after language toggle
+- **[FIX]** Hard mode warning popup same fix — deferred show, translations reapplied on open
+- **[FIX]** `reset_button.gd` stale `@onready` replaced with lazy popup lookup
+- **[FIX]** Stat overlay popup (game over + high scores) not scrollable on Android — `row_btn` nodes had `MOUSE_FILTER_STOP` swallowing touch drag events before `ScrollContainer` could receive them; changed to `MOUSE_FILTER_PASS`
+- **[FIX]** Stat overlay panel dynamically sizes to fit content — width calculated from widest label in each column using `ThemeDB.fallback_font.get_string_size()`; no more text overflow or undersized background
+- **[FIX]** `Translations.fit_label()` helper added — shrinks font size until text fits bounding box; applied to score HUD label and stat overlay value column
+- **[FIX]** SetControls Es_FakeWeaponDoll texture swapped onto wrong node (`UseItem` instead of `Reload`)
+- **[FIX]** Language button and Scores button added to controller focus chain on main menu
+- **[FIX]** Controller aim deadzone reduced to 0.08 and lerp speed increased to 30.0 for more responsive aiming
+- **[FIX]** Right thumbstick scrolls stat overlay popup when using a controller
+- **[FIX]** `Es_Scores.png` / `Scores.png` swap wired into `scores_button.gd` and triggered by language toggle via `_apply_language_assets()`
+- **[ADD]** `scores_button.gd` now includes `is_inside_tree()` guard after await
+
+---
+
 ## v1.5
 ### SPANISH TRANSLATION + BUG FIXES
 
