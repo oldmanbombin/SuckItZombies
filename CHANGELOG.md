@@ -822,4 +822,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-05-30 (v1.5)_
+_Changelog updated 2026-05-30 (v1.5.2)_
