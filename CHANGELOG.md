@@ -1,41 +1,37 @@
-# SiZ - Suck it, Zombies
+# SiZ — Suck it, Zombies
 ## Development Changelog
 
-## v1.5.2
-### BUG FIXES + POLISH
+## v1.6
+### SPAWN OVERHAUL + QOL
 
-- **[FIX]** Quit warning popup fires immediately on tap - `ControllerInput.gd` had its own `show_quit_warning()` that called `quit_game()` directly when not using a controller, causing a double-connection on the Quit button; both now do a lazy popup lookup at call time
-- **[FIX]** Quit/Reset warning popups bypass touch propagation issue - `show_warning()` now defers visibility via `call_deferred` so the opening touch cannot simultaneously fire the Yes button; translations reapplied on every show so they update correctly after language toggle
-- **[FIX]** Hard mode warning popup same fix - deferred show, translations reapplied on open
-- **[FIX]** `reset_button.gd` stale `@onready` replaced with lazy popup lookup
-- **[FIX]** Stat overlay popup (game over + high scores) not scrollable on Android - `row_btn` nodes had `MOUSE_FILTER_STOP` swallowing touch drag events before `ScrollContainer` could receive them; changed to `MOUSE_FILTER_PASS`
-- **[FIX]** Stat overlay panel dynamically sizes to fit content - width calculated from widest label in each column using `ThemeDB.fallback_font.get_string_size()`; no more text overflow or undersized background
-- **[FIX]** `Translations.fit_label()` helper added - shrinks font size until text fits bounding box; applied to score HUD label and stat overlay value column
-- **[FIX]** SetControls Es_FakeWeaponDoll texture swapped onto wrong node (`UseItem` instead of `Reload`)
-- **[FIX]** Language button and Scores button added to controller focus chain on main menu
-- **[FIX]** Controller aim deadzone reduced to 0.08 and lerp speed increased to 30.0 for more responsive aiming
-- **[FIX]** Right thumbstick scrolls stat overlay popup when using a controller
-- **[FIX]** `Es_Scores.png` / `Scores.png` swap wired into `scores_button.gd` and triggered by language toggle via `_apply_language_assets()`
-- **[ADD]** `scores_button.gd` now includes `is_inside_tree()` guard after await
+- **[ADD]** Off-screen enemy recycling -- enemies outside the visible area for 5+ seconds are silently despawned and replaced near the player's direction of travel; recycled enemies do not count toward the kill quota; viewport threshold scales by input mode (play area bounds for touch, full viewport for controller)
+- **[ADD]** Round-end boss spawning reworked -- runners and tanks now spawn fresh with correct type at the boss trigger threshold instead of converting from existing enemies; all living enemies at the trigger remain alive and count toward quota
+- **[ADD]** Spawn quota cap -- normal spawning halts once the round has produced enough enemies to reach the boss threshold; no excess enemies exist at round end; end-of-round enemy sweep removed from intermission
+- **[ADD]** Skip button on Item button during intermission -- MeatBomb/Drone texture swaps to SkipButton asset (EN/ES) on intermission start and restores when the bar fades; tapping calls skip logic
+- **[ADD]** Round number display on touch controller HUD -- Round, Cash, and Score shown together in the player doll area
+- **[ADD]** Round number display on Bluetooth controller HUD -- Round label added below existing Score and Currency labels
+- **[ADD]** "Round: " / "Ronda: " added to translation dictionary
+- **[FIX]** Spawned enemies briefly displaying Crawler animation before morphing to correct type -- `_ready()` now sets correct walk animation immediately after loading attributes
+- **[FIX]** Currency label position overridden at runtime in touch mode -- touch mode no longer repositions the currency label
 
 ---
 
 ## v1.5
 ### SPANISH TRANSLATION + BUG FIXES
 
-- **[ADD]** Full Spanish translation - all player-facing UI, menus, armory items and descriptions, weapon names, interactable labels, game over stats, controller remap screen, and warning popups; language toggles instantly via Eng/Esp button on main menu and persists across sessions
-- **[ADD]** `Translations.gd` autoload - central EN→ES dictionary with `_t()` helper; all translated strings route through a single source of truth
+- **[ADD]** Full Spanish translation — all player-facing UI, menus, armory items and descriptions, weapon names, interactable labels, game over stats, controller remap screen, and warning popups; language toggles instantly via Eng/Esp button on main menu and persists across sessions
+- **[ADD]** `Translations.gd` autoload — central EN→ES dictionary with `_t()` helper; all translated strings route through a single source of truth
 - **[ADD]** `armory.json` and `weapons.json` extended with `label_es`, `desc_es`, and `display_name_es` fields for all translatable entries
-- **[ADD]** High scores screen accessible from main menu - displays full solo leaderboard with tappable stat overlays; identical layout to post-game screen minus the score entry panel and play again/quit buttons; back button returns to main menu
-- **[FIX]** Bluetooth audio devices and headsets no longer trigger controller mode - `_find_device()` now filters connected joypads by name against a blocklist of known audio device patterns; startup and per-frame checks both use the same filter
-- **[FIX]** FMJ pierce inconsistency - `check_collision()` now sorts all simultaneous collisions by distance before processing; nearest enemy always receives the full pierce chance first; previously `move_and_slide()` could return a behind enemy before the near one, consuming a pierce charge out of order
-- **[FIX]** Initials input field does not capture virtual keyboard on controller - field receives GUI focus immediately when the qualifies panel appears with a controller connected; keyboard input now routes correctly without requiring Return + re-tap
-- **[FIX]** LAN lobby player labels showed "Vac 1/2/3/4" - now display character names (Harry/Larry/Mary/Geri) matching the sprite select screen
-- **[FIX]** LAN lobby sprite/name labels misaligned in multiplayer layout - `_apply_mp_positions()` now repositions `SpriteLabel` nodes to follow their buttons
+- **[ADD]** High scores screen accessible from main menu — displays full solo leaderboard with tappable stat overlays; identical layout to post-game screen minus the score entry panel and play again/quit buttons; back button returns to main menu
+- **[FIX]** Bluetooth audio devices and headsets no longer trigger controller mode — `_find_device()` now filters connected joypads by name against a blocklist of known audio device patterns; startup and per-frame checks both use the same filter
+- **[FIX]** FMJ pierce inconsistency — `check_collision()` now sorts all simultaneous collisions by distance before processing; nearest enemy always receives the full pierce chance first; previously `move_and_slide()` could return a behind enemy before the near one, consuming a pierce charge out of order
+- **[FIX]** Initials input field does not capture virtual keyboard on controller — field receives GUI focus immediately when the qualifies panel appears with a controller connected; keyboard input now routes correctly without requiring Return + re-tap
+- **[FIX]** LAN lobby player labels showed "Vac 1/2/3/4" — now display character names (Harry/Larry/Mary/Geri) matching the sprite select screen
+- **[FIX]** LAN lobby sprite/name labels misaligned in multiplayer layout — `_apply_mp_positions()` now repositions `SpriteLabel` nodes to follow their buttons
 - **[FIX]** LAN lobby player rows now have alternating subtle background tint for readability
 - **[FIX]** Sprite select stat labels (Speed, HP, Dash Cooldown, Ability Cooldown) now translate correctly in Spanish
-- **[FIX]** Language toggle did not update Version and LAN Multiplayer labels until scene reload - both labels re-applied on every toggle via `_apply_language_text()`
-- **[FIX]** `start_lobby()`, `start_game()`, `quit_game()`, and `_on_credits_pressed()` in `main.gd` now guard `get_tree()` calls after `await` with `is_inside_tree()` - prevents null tree crash on double-tap or rapid navigation
+- **[FIX]** Language toggle did not update Version and LAN Multiplayer labels until scene reload — both labels re-applied on every toggle via `_apply_language_text()`
+- **[FIX]** `start_lobby()`, `start_game()`, `quit_game()`, and `_on_credits_pressed()` in `main.gd` now guard `get_tree()` calls after `await` with `is_inside_tree()` — prevents null tree crash on double-tap or rapid navigation
 - **[FIX]** Pause menu Leave Match and Quit Game buttons now centered correctly in Spanish
 
 ---
@@ -124,39 +120,39 @@
 
 ## v3.3.3a
 ### CONTROLLER SUPPORT PASS
-- **[FIX]** B on Main Menu now correctly quits the game - was reloading the menu instead of calling `get_tree().quit()`
-- **[FIX]** Popups now absorb all controller input when visible - focus grabbed on open via `_process` timer to win the deferred focus race; `ControllerInput._unhandled_input` guards per popup block all bleed-through; B closes, A navigates Next/Close, focus restored to appropriate button after dismiss
-- **[FIX]** B blocked on tutorial armory tip (no-button tip forcing player toward the armory) - guard checks `CloseButton.visible` before allowing B to fire `_on_close()`
-- **[ADD]** Armory D-pad up at top of item list shifts focus to Back button (yellow tint); D-pad down returns to top of list; A activates Back when focused - works in both regular and tutorial armory
+- **[FIX]** B on Main Menu now correctly quits the game — was reloading the menu instead of calling `get_tree().quit()`
+- **[FIX]** Popups now absorb all controller input when visible — focus grabbed on open via `_process` timer to win the deferred focus race; `ControllerInput._unhandled_input` guards per popup block all bleed-through; B closes, A navigates Next/Close, focus restored to appropriate button after dismiss
+- **[FIX]** B blocked on tutorial armory tip (no-button tip forcing player toward the armory) — guard checks `CloseButton.visible` before allowing B to fire `_on_close()`
+- **[ADD]** Armory D-pad up at top of item list shifts focus to Back button (yellow tint); D-pad down returns to top of list; A activates Back when focused — works in both regular and tutorial armory
 - **[FIX]** Tutorial armory D-pad up to Back button blocked until laser is purchased
-- **[FIX]** All non-laser purchases blocked in tutorial armory - play Unable.mp3 and show "Purchase the Laser Sight first!"; covers both touch and controller paths
-- **[FIX]** Laser panel pre-selected on tutorial armory entry - highlight, desc, and cost populated immediately; A purchases in one press
-- **[FIX]** Tutorial armory controller navigation locked correctly - LB/RB, D-pad left/right, and B blocked; D-pad up/down and A pass through to normal handlers
-- **[FIX]** Armory marks joypad events as handled via `set_input_as_handled()` - prevents `ControllerInput` double-processing controller input in armory scene
-- **[ADD]** `XBoxButtonsPopUp` - shows `XBoxButtons.png` at 80% viewport scale before Controller tips phase 1; skipped if no controller connected or already seen
-- **[ADD]** `ArmoryControllerPopUp` - shows `ArmoryControllerPopUp.png` at 80% viewport scale before Armory tips; skipped if no controller connected or already seen
+- **[FIX]** All non-laser purchases blocked in tutorial armory — play Unable.mp3 and show "Purchase the Laser Sight first!"; covers both touch and controller paths
+- **[FIX]** Laser panel pre-selected on tutorial armory entry — highlight, desc, and cost populated immediately; A purchases in one press
+- **[FIX]** Tutorial armory controller navigation locked correctly — LB/RB, D-pad left/right, and B blocked; D-pad up/down and A pass through to normal handlers
+- **[FIX]** Armory marks joypad events as handled via `set_input_as_handled()` — prevents `ControllerInput` double-processing controller input in armory scene
+- **[ADD]** `XBoxButtonsPopUp` — shows `XBoxButtons.png` at 80% viewport scale before Controller tips phase 1; skipped if no controller connected or already seen
+- **[ADD]** `ArmoryControllerPopUp` — shows `ArmoryControllerPopUp.png` at 80% viewport scale before Armory tips; skipped if no controller connected or already seen
 - **[ADD]** Translucent black backdrop added to all five popup scenes
 
 ## v3.3.2a
 ### INITIALS INPUT FIX + Z-INDEX PATCH + TUTORIAL ICONS
-- **[ADD]** Pickup icons baked into tutorial popup images - players can now visually identify cash, health, bomb, and drone pickups from the tutorial overlay
-- **[FIX]** Initials input unresponsive on game over screen until Return was pressed first - root cause: focus and keyboard deferred behind `_user_initiated` gate requiring an explicit touch event; fixed by grabbing focus and calling `DisplayServer.virtual_keyboard_show()` immediately in `_ready()` when score qualifies; `_user_initiated` flag and `_on_initials_input_gui_input` removed entirely
-- **[ADD]** Initials field pre-fills with last submitted initials for the session - `GameManager.last_initials` set on each `save_solo_score()` call; field text selected on open so typing immediately replaces it
-- **[FIX]** Player sprite rendering above Map002 cabin/shed rooftops - z-index values on occluding structures corrected in Map002.tscn; player now renders below rooftop layer as intended
+- **[ADD]** Pickup icons baked into tutorial popup images — players can now visually identify cash, health, bomb, and drone pickups from the tutorial overlay
+- **[FIX]** Initials input unresponsive on game over screen until Return was pressed first — root cause: focus and keyboard deferred behind `_user_initiated` gate requiring an explicit touch event; fixed by grabbing focus and calling `DisplayServer.virtual_keyboard_show()` immediately in `_ready()` when score qualifies; `_user_initiated` flag and `_on_initials_input_gui_input` removed entirely
+- **[ADD]** Initials field pre-fills with last submitted initials for the session — `GameManager.last_initials` set on each `save_solo_score()` call; field text selected on open so typing immediately replaces it
+- **[FIX]** Player sprite rendering above Map002 cabin/shed rooftops — z-index values on occluding structures corrected in Map002.tscn; player now renders below rooftop layer as intended
 
 ## v3.3.1a
 ### PICKUP SUCTION SYSTEM
-- **[ADD]** Pickup suction - cash, health, meat bomb, and drone pickups magnetically attract toward nearby players within 500 units; attraction gates match collection gates (cash always, health if below max HP, bomb/drone only if the other item type is in slot); speed scales from 100 to 800 units/sec as distance closes; suction sound (PlayerMovement.mp3 pitched up) plays on attraction start and stops on collection or release
+- **[ADD]** Pickup suction — cash, health, meat bomb, and drone pickups magnetically attract toward nearby players within 500 units; attraction gates match collection gates (cash always, health if below max HP, bomb/drone only if the other item type is in slot); speed scales from 100 to 800 units/sec as distance closes; suction sound (PlayerMovement.mp3 pitched up) plays on attraction start and stops on collection or release
 
 ## v3.3a
 ### ENEMY DAMAGE REWORK + HYPNO ALLY FIX + ACCESSIBILITY PASS + Z-INDEX AUDIT
-- **[ADD]** Enemy `contact_damage` stat added to `enemies.json` per type - damage no longer stored on player; hard mode 1.5x multiplier applied enemy-side
-- **[ADD]** Hypno ally attack loop rewritten to `_process`-based timer - eliminates silent coroutine failure bug
+- **[ADD]** Enemy `contact_damage` stat added to `enemies.json` per type — damage no longer stored on player; hard mode 1.5x multiplier applied enemy-side
+- **[ADD]** Hypno ally attack loop rewritten to `_process`-based timer — eliminates silent coroutine failure bug
 - **[ADD]** Hypno ally damage and speed now inherit from source enemy type
 - **[ADD]** Full z-index hierarchy established across all scenes/scripts; dynamic swap on dash (enemies drop below player and trail during dash, restore on end)
-- **[ADD]** Accessibility pass - mutant enemies recolored magenta (hue shift + aura rings); drone life bar blue→orange; armory owned tint gold; ammo label white; lobby color dots with letter designators (Y/K/D/N)
-- **[FIX]** `HIT_DAMAGE` removed from `PlayerBasics.gd` and `player_attributes.json` - was dead after enemy damage rework
-- **[FIX]** FMJ `_fmj_hit_enemies.append()` unreachable after `continue` - fixed; enemies now correctly tracked per projectile lifetime
+- **[ADD]** Accessibility pass — mutant enemies recolored magenta (hue shift + aura rings); drone life bar blue→orange; armory owned tint gold; ammo label white; lobby color dots with letter designators (Y/K/D/N)
+- **[FIX]** `HIT_DAMAGE` removed from `PlayerBasics.gd` and `player_attributes.json` — was dead after enemy damage rework
+- **[FIX]** FMJ `_fmj_hit_enemies.append()` unreachable after `continue` — fixed; enemies now correctly tracked per projectile lifetime
 - **[TWEAK]** Drone/bomb armory upgrade labels changed to Mk.II/III/IV
 - **[TWEAK]** MeatBomb Mk.II description updated to reflect actual damage behavior (was "kills basics and runners")
 
@@ -475,21 +471,21 @@
 ### ATTRIBUTES, VARIANT ENEMIES + RESTRUCTURE
 > First fundamental architecture change since v1.0. JSON-driven attributes, dynamic map loading, variant enemy types, and a full project restructure.
 
-- **[ADD]** Dynamic map loading - map world no longer baked into SiZ_Game.tscn
+- **[ADD]** Dynamic map loading — map world no longer baked into SiZ_Game.tscn
   - _overall_test._ready() loads GameManager.selected_map at runtime and adds it to $World before any spawning occurs. NavigationRegion2D is in the tree before enemies are created. Adding a new map requires only a new .tscn and a GameManager.MAPS entry._
-- **[ADD]** player_attributes.json - all player stats driven by JSON
+- **[ADD]** player_attributes.json — all player stats driven by JSON
   - _Stats: max_speed, max_hp, dash_cooldown, secondary_cooldown (displayed), reload_duration, smash_range, dash_distance, max_fire_distance, meat_bomb_max (Armory), plus flat tuning values. Four player entries plus lan_default (tier 3 across the board for all LAN players)._
-- **[ADD]** Tier system for player stats - 1 to 5 stars in 20% increments of max value
+- **[ADD]** Tier system for player stats — 1 to 5 stars in 20% increments of max value
   - _Each vacuum has a fixed loadout: one 1-star stat (clear weakness), two 4-star stats (clear strengths), one 2-star stat. Tier values map to actual game constants loaded at runtime. Star ratings displayed on SpriteSelect screen._
 - **[ADD]** weapons.json wired into PlayerBasics at runtime
   - __load_weapon_data() called at _ready(). All weapon consts (fire_rate, burst_max, spread_degrees, aim_threshold_degrees, pellets) converted to vars and overwritten from JSON. Falls back to hardcoded defaults if JSON missing. Debug print confirms load on startup._
-- **[ADD]** enemies.json - enemy stats and visual properties driven by JSON
+- **[ADD]** enemies.json — enemy stats and visual properties driven by JSON
   - _Keys: basic, runner. Fields: max_speed, damage_interval, contact_range, sound_range, shader, hue_shift, color_mod. basic has no shader. runner is faster, damages more frequently, and has a teal hue shift._
-- **[ADD]** Variant enemy types - runner introduced as second enemy type
+- **[ADD]** Variant enemy types — runner introduced as second enemy type
   - _enemy_spawner.gd picks type via weighted random draw (70% basic, 30% runner) and passes enemy_type through spawn data. enemy_type synced via MultiplayerSynchronizer so clients apply correct visuals._
-- **[ADD]** enemy_hueshift.gdshader - canvas item shader for variant enemy skins
+- **[ADD]** enemy_hueshift.gdshader — canvas item shader for variant enemy skins
   - _hue_shift (0.0-1.0) and color_mod (RGB multiplier) uniforms. Applied at spawn via _apply_visuals() reading from enemies.json._
-- **[ADD]** enemy_hueshift_outline.gdshader - combined hue shift + smash outline in a single pass
+- **[ADD]** enemy_hueshift_outline.gdshader — combined hue shift + smash outline in a single pass
   - _Solves shader layering: hue shift and smash highlight previously overwrote each other since ShaderMaterial only supports one material slot. Combined shader applies hue shift to opaque pixels and outline to transparent border pixels simultaneously. Hue/color_mod params read from enemies.json per enemy type on highlight._
 - **[TWEAK]** PUSHBACK_COOLDOWN and SMASH_COOLDOWN merged into single SECONDARY_COOLDOWN
   - _Both abilities share one cooldown value driven by secondary_cooldown in player_attributes.json. Simplifies tuning and display on SpriteSelect screen._
@@ -498,26 +494,26 @@
 - **[TWEAK]** Aim distance (max_fire_distance) raised from tier 3 (540) to tier 4 (720) for all players
 - **[TWEAK]** Dash distance raised 30% across all players and lan_default (300 -> 390)
 - **[ADD]** Full project directory restructure
-  - _Scripts/, Audio/, Images/, Shaders/ at root level, each grouped by scene. Scenes/ is flat - all .tscn files at one level with no subfolders. Autoloads moved to Scripts/Autoloads/. Overall_Test renamed to SiZ_Game throughout._
-- **[TWEAK]** Dead files pruned - PlayerBasics.gd.bak, SiZ_sounds.m4a, TestZombieText.png, duplicate WeaponButton images from Weapons/Images/, Level001/ folder
-- **[FIX]** GDScript warnings cleaned up - unused vars and params across GameManager, GameEffectsManager, VolumeButton, MusicButton, SecondaryAbilityButton
+  - _Scripts/, Audio/, Images/, Shaders/ at root level, each grouped by scene. Scenes/ is flat — all .tscn files at one level with no subfolders. Autoloads moved to Scripts/Autoloads/. Overall_Test renamed to SiZ_Game throughout._
+- **[TWEAK]** Dead files pruned — PlayerBasics.gd.bak, SiZ_sounds.m4a, TestZombieText.png, duplicate WeaponButton images from Weapons/Images/, Level001/ folder
+- **[FIX]** GDScript warnings cleaned up — unused vars and params across GameManager, GameEffectsManager, VolumeButton, MusicButton, SecondaryAbilityButton
   - __compute_score p param prefixed _p. meta var in GameEffectsManager prefixed _meta. layout_mode = 1 line removed from volume button layer builder (redundant with anchors_preset). set_smash_textures pressed param renamed pressed_tex. Dead var scale removed from LeftThumb and RightThumb._
-- **[ADD]** Lobby flow rebuilt - host, sprite select, map select, and return all handled correctly
+- **[ADD]** Lobby flow rebuilt — host, sprite select, map select, and return all handled correctly
   - _lan_player_data persisted in GameManager across scene changes. _restore_as_host() and _restore_as_client() repopulate lobby on return from SpriteSelect/MapSelect. Clients request state resync from server on lobby load._
-- **[ADD]** sprites_updated signal on GameManager - lobby refreshes on all peers whenever sprite dict changes
+- **[ADD]** sprites_updated signal on GameManager — lobby refreshes on all peers whenever sprite dict changes
   - _Emitted inside rpc_sync_sprites (call_local). Lobby connects in _ready() and calls refresh_player_list() + _update_start_button() on every update._
 - **[ADD]** Start Game gated on map confirmed AND all connected players having sprites
 - **[ADD]** Pulsing gold highlight on Pick Sprite and Choose Map buttons when required action is pending
 - **[ADD]** Pick Sprite button switches to Change Sprite after selection
 - **[ADD]** Lobby dot and Vac label now reflect vacuum body color keyed by sprite index, not join slot
 - **[ADD]** SpriteSelect buttons now display the vacuum Middle animation frame instead of raw body texture
-- **[ADD]** Random player spawn positions - solo spawns anywhere valid in world bounds; LAN clients spawn within 250 units of host
+- **[ADD]** Random player spawn positions — solo spawns anywhere valid in world bounds; LAN clients spawn within 250 units of host
   - _GameManager.get_player_spawn_position() and get_player_spawn_near() use PhysicsDirectSpaceState2D shape queries. Fixed spawn array retained as fallback only._
-- **[ADD]** rpc_sync_game_over_data RPC - server pushes final_scores and lan_player_data to all clients before scene change
+- **[ADD]** rpc_sync_game_over_data RPC — server pushes final_scores and lan_player_data to all clients before scene change
   - _Fixes blank leaderboard on client game over screen. Called from both trigger_game_over and _on_quit_to_menu._
 - **[TWEAK]** LANGameOver leaderboard uses lan_player_data names instead of raw ENet peer IDs
 - **[TWEAK]** Play Again removed from LAN game over screen pending replay vote system
-- **[TWEAK]** LANGameOver panel removed - results render directly over the painted leaderboard area in the background image
+- **[TWEAK]** LANGameOver panel removed — results render directly over the painted leaderboard area in the background image
 - **[FIX]** Index out of bounds crash on player spawn
   - _Root cause: removing contact_time replication property left a gap in SceneReplicationConfig index sequence (0,1,2,3,5). Renumbered all four player scenes 0-4._
 - **[FIX]** Instant death on first enemy touch in multiplayer
@@ -550,23 +546,23 @@
   - _Speaker and music note icon buttons. Three-tier cycling: mute / 50% / 100%. Each button uses layered image overlays (base + level indicators) rather than swapped textures. Settings persisted to user://settings.json and restored on startup._
 - **[ADD]** Dedicated SFX and Music audio buses created at runtime by MusicManager
   - _SFX bus controls all non-music audio. Music bus is independent. Master bus never touched by either control. Bus names stamped in code at _ready() on all AudioStreamPlayer nodes project-wide to fix Godot bus name resolution timing._
-- **[ADD]** ButtonClickPlayer nodes added to SoloGameOver and LANGameOver - click sounds on Play Again, Quit, and Submit
+- **[ADD]** ButtonClickPlayer nodes added to SoloGameOver and LANGameOver — click sounds on Play Again, Quit, and Submit
 - **[FIX]** Pickup sprite flash not visible during despawn window
-  - _Root cause: modulate.a on the Node2D parent does not propagate through a child ShaderMaterial - the shader renders at full alpha independently of the parent modulate hierarchy. Fixed by driving a flash_alpha uniform directly on the shader material each frame. Both the sprite pixels and the glow outline now fade together._
+  - _Root cause: modulate.a on the Node2D parent does not propagate through a child ShaderMaterial — the shader renders at full alpha independently of the parent modulate hierarchy. Fixed by driving a flash_alpha uniform directly on the shader material each frame. Both the sprite pixels and the glow outline now fade together._
 - **[FIX]** layout_mode integer-to-enum warnings in VolumeButton and MusicButton
-  - _Control.LAYOUT_MODE_ANCHORS does not exist in Godot 4.6. Redundant layout_mode assignment removed - anchors_preset already sets it implicitly._
+  - _Control.LAYOUT_MODE_ANCHORS does not exist in Godot 4.6. Redundant layout_mode assignment removed — anchors_preset already sets it implicitly._
 
 
 ## v1.3.11a
 ### SPRITE SELECT + MAP SELECT + GAME FLOW
-- **[ADD]** SpriteSelect scene - 4 vacuum portrait buttons, confirm/back navigation, stats display
+- **[ADD]** SpriteSelect scene — 4 vacuum portrait buttons, confirm/back navigation, stats display
   - _Stats shown as asterisk star ratings (e.g. *** = 3/5) for Speed, HP, Dash, and Secondary. In LAN mode, sprites claimed by other peers are greyed out and disabled._
-- **[ADD]** MapSelect scene - map thumbnail buttons with name labels, confirm/back navigation
-  - _All buttons are real scene nodes - positions and sizes editable in the 2D editor. Adding a new map requires a MapButtonN node, a connection, and a GameManager.MAPS entry._
+- **[ADD]** MapSelect scene — map thumbnail buttons with name labels, confirm/back navigation
+  - _All buttons are real scene nodes — positions and sizes editable in the 2D editor. Adding a new map requires a MapButtonN node, a connection, and a GameManager.MAPS entry._
 - **[ADD]** Solo flow: Main Menu -> SpriteSelect -> MapSelect -> game
 - **[ADD]** LAN flow: Main Menu -> Lobby -> Pick Sprite (per-player button in lobby row) -> SpriteSelect -> Lobby -> host picks map -> Start Game
   - _Start Game button only appears after host confirms a map. Map choice broadcast to all peers via GameManager.rpc_sync_map(). Sprite selections synced via GameManager.rpc_sync_sprites(). Each peer's sprite shown in their lobby row._
-- **[ADD]** BasicPlayer0002-0004.tscn created - full clones of 0001 with unique scene UIDs and node IDs
+- **[ADD]** BasicPlayer0002-0004.tscn created — full clones of 0001 with unique scene UIDs and node IDs
 - **[ADD]** GameManager.game_scene const separated from selected_map
   - _selected_map holds the world geometry path. game_scene always points to SiZ_Game.tscn. Map select sets selected_map; confirm navigates to game_scene. Fixes map select loading bare world geometry instead of the full game scene._
 - **[TWEAK]** selected_sprites, selected_map, and map_confirmed excluded from GameManager.reset()
@@ -583,9 +579,9 @@
 ### SCORING + GAME OVER SCREENS
 - **[ADD]** Per-peer score tracking in GameManager
   - _Four counters per peer: S (seconds survived), E (enemies killed), P (trigger pulls), N (pickups collected). Formula: (E*5) + (N*3) + S. Trigger pulls reported via RPC in MP. build_final_scores() computes all peers at end of game._
-- **[ADD]** SoloGameOver scene - score display, initials entry, top-10 leaderboard
+- **[ADD]** SoloGameOver scene — score display, initials entry, top-10 leaderboard
   - _Current run score shown large. If score qualifies, initials panel appears with LineEdit (max 3 chars). Leaderboard renders as Labels positioned to align with the baked background image slots. Current run entry highlighted in gold. Scores persisted to user://scores.json._
-- **[ADD]** LANGameOver scene - per-peer score summary sorted descending
+- **[ADD]** LANGameOver scene — per-peer score summary sorted descending
   - _All peers listed with rank, player label, and score. First place highlighted in gold._
 - **[ADD]** Play Again and Quit buttons on both game over screens with click sounds
 - **[FIX]** _flashing unused parameter warning in AnimatedSprite._on_health_changed()
@@ -602,7 +598,7 @@
   - _Player now has 100 HP (MAX_HP) with HIT_DAMAGE=10 per hit. No passive regen. Health only restored by HealthPickup._
 - **[ADD]** Per-enemy damage interval system in basic_enemy.gd
   - _Each enemy tracks its own _damage_timer. On first contact: immediate hit. Timer resets to DAMAGE_INTERVAL (1.0s) and counts down while in range. Re-contact after leaving range also triggers an immediate hit._
-- **[ADD]** HealthPickup item - heals max(5, ceil(missing * 0.5)) HP on contact
+- **[ADD]** HealthPickup item — heals max(5, ceil(missing * 0.5)) HP on contact
   - _Dropped by enemies on death at 5% rate (excludes smash/dash/bomb kills). heal_pickup() RPC on PlayerBasics. HealthPickupSpawner added to SiZ_Game.tscn._
 - **[TWEAK]** Vignette reworked: persistent damage scaling + hit flash
   - _Vignette invisible at full HP. Scales 0->1 as HP drops 100->0. On each hit: immediate spike that decays at 4x/sec back to damage baseline._
@@ -614,27 +610,27 @@
 
 ## v1.3.8a
 ### AUDIO PASS + CODE AUDIT + DEAD CODE CLEANUP
-- **[ADD]** Sound effects wired - ButtonClick, Dash, Pushback, Reload, CooldownComplete
+- **[ADD]** Sound effects wired — ButtonClick, Dash, Pushback, Reload, CooldownComplete
   - _ButtonClickPlayer nodes added to Controller.tscn and CanvasLayer in SiZ_Game.tscn (process_mode=ALWAYS). Also added to MultiplayerLobby.tscn. ReloadAudio node added to BasicPlayer0001.tscn._
-- **[ADD]** Reload reworked - timed instant refill replaces continuous ammo regen
+- **[ADD]** Reload reworked — timed instant refill replaces continuous ammo regen
   - _2.04s RELOAD_DURATION matches ReloadAudio.mp3 length. _start_reload_mosin/_shotgun() set reloading flag, play audio, create timer. _finish_reload_*() restores full ammo instantly._
-- **[TWEAK]** CooldownComplete sound plays on all ability button pop animations - SecondaryAbilityButton, DashButton, MeatBombButton
-- **[TWEAK]** Dash and Pushback sounds wired in PlayerBasics - authority-only, routed through Controller node
+- **[TWEAK]** CooldownComplete sound plays on all ability button pop animations — SecondaryAbilityButton, DashButton, MeatBombButton
+- **[TWEAK]** Dash and Pushback sounds wired in PlayerBasics — authority-only, routed through Controller node
 - **[FIX]** Pause-state audio not playing on menu/inventory open
   - _Fixed by setting process_mode=PROCESS_MODE_ALWAYS on both ButtonClickPlayer nodes._
 - **[FIX]** Inventory close playing double click sound
   - _Redundant _play_click() in _on_inventory_button_pressed() removed._
-- **[FIX]** Scene-transition click sounds cutting short - fixed with 0.27s await before change_scene_to_file()
+- **[FIX]** Scene-transition click sounds cutting short — fixed with 0.27s await before change_scene_to_file()
 - **[FIX]** Shotgun could call die() on the same enemy multiple times in one physics frame
   - _Fixed with is_dying bool flag in basic_enemy.gd._
-- **[TWEAK]** Dead code removed - min_spawn_distance export was unused; max_spawn_distance renamed spawn_margin
-- **[NOTE]** Multiplayer code audit - architecture sound; untested paths noted (dash, MeatBomb, death in live MP)
+- **[TWEAK]** Dead code removed — min_spawn_distance export was unused; max_spawn_distance renamed spawn_margin
+- **[NOTE]** Multiplayer code audit — architecture sound; untested paths noted (dash, MeatBomb, death in live MP)
 
 
 ## v1.3.7a
 ### AUDIO GROUNDWORK + SQUISH SOUND + RELOAD AUDIO
-- **[ADD]** AudioStreamPlayer nodes added to Controller.tscn - ButtonClickPlayer, CooldownCompletePlayer, DashSoundPlayer, PushbackSoundPlayer
-- **[ADD]** Squish sound on smash kill - SquishSound reparented to scene root on death so audio survives queue_free
+- **[ADD]** AudioStreamPlayer nodes added to Controller.tscn — ButtonClickPlayer, CooldownCompletePlayer, DashSoundPlayer, PushbackSoundPlayer
+- **[ADD]** Squish sound on smash kill — SquishSound reparented to scene root on death so audio survives queue_free
   - __play_squish_rpc() called on all peers; only plays if local player within SOUND_RANGE (1500px) of death position._
 - **[ADD]** ReloadAudio node added to BasicPlayer0001.tscn
 - **[ADD]** Controller button click sounds wired on all ability buttons
@@ -646,75 +642,75 @@
 ### SMASH HIGHLIGHT + MEATBOMB PICKUP + DASH KILL
 - **[TWEAK]** Smash highlight changed from full red tint to red outline shader
   - _enemy_outline.gdshader applied via ShaderMaterial to AnimatedBasicEnemy sprite._
-- **[ADD]** MeatBomb pickup system - 5% enemy drop chance on death (excludes MeatBomb/Dash kills)
+- **[ADD]** MeatBomb pickup system — 5% enemy drop chance on death (excludes MeatBomb/Dash kills)
   - _Pulsing orange glow shader. Spawned via MeatBombPickupSpawner. Max 3 carried._
-- **[TWEAK]** MeatBomb button disabled at 0 bombs - players start with none and must find pickups
+- **[TWEAK]** MeatBomb button disabled at 0 bombs — players start with none and must find pickups
 - **[ADD]** METHOD_MEAT_BOMB and METHOD_DASH added to GameEffectsManager kill method registry
-- **[ADD]** Dash kills - enemies within 60px during a dash are killed with METHOD_DASH
+- **[ADD]** Dash kills — enemies within 60px during a dash are killed with METHOD_DASH
 
 
 ## v1.3.5a
 ### ENEMY OVERHAUL
-- **[ADD]** Enemy spawn logic reworked - spawns in rectangular annulus outside visible play area
+- **[ADD]** Enemy spawn logic reworked — spawns in rectangular annulus outside visible play area
   - _Logic moved into GameManager.get_valid_spawn_position()._
-- **[TWEAK]** Enemy collision polygon reshaped - aids lateral movement around players and obstacles
+- **[TWEAK]** Enemy collision polygon reshaped — aids lateral movement around players and obstacles
 - **[TWEAK]** Enemy sprite texture updated
 - **[TWEAK]** Enemy face direction changed from destination-based to velocity-based
 
 
 ## v1.3.4a
 ### ENEMY NAVIGATION
-- **[ADD]** NavigationRegion2D added to map_001.tscn - baked navmesh for X-shaped walkable area
-- **[ADD]** NavigationAgent2D added to BasicEnemy.tscn - enemies path around obstacles
-- **[FIX]** NavigationRegion2D inheriting scale 3.118 from map sprite parent - fixed by keeping region at root level
-- **[FIX]** Obstacle holes rendering as walkable area - fixed by winding inner polygons clockwise
-- **[NOTE]** Enemy piling at chokepoints - avoidance attempted and removed due to stationary bug; accepted as-is
+- **[ADD]** NavigationRegion2D added to map_001.tscn — baked navmesh for X-shaped walkable area
+- **[ADD]** NavigationAgent2D added to BasicEnemy.tscn — enemies path around obstacles
+- **[FIX]** NavigationRegion2D inheriting scale 3.118 from map sprite parent — fixed by keeping region at root level
+- **[FIX]** Obstacle holes rendering as walkable area — fixed by winding inner polygons clockwise
+- **[NOTE]** Enemy piling at chokepoints — avoidance attempted and removed due to stationary bug; accepted as-is
 
 
 ## v1.3.3a
 ### DASH + HUD POLISH
 - **[ADD]** WeaponDoll HUD moved into WeaponDoll.tscn as scene nodes
-- **[TWEAK]** Dash world boundary handling - per-axis velocity cancellation; lateral momentum preserved
+- **[TWEAK]** Dash world boundary handling — per-axis velocity cancellation; lateral momentum preserved
 - **[FIX]** Mosin-Nagant name typo fixed in PlayerBasics.gd
 
 
 ## v1.3.2a
 ### DASH ABILITY + CODE AUDIT
-- **[ADD]** Dash ability - 500-unit slide in facing direction, 10s cooldown, collision disabled during dash
-- **[TWEAK]** World boundary bounce on dash - push-back 15 units on world_min/world_max contact
+- **[ADD]** Dash ability — 500-unit slide in facing direction, 10s cooldown, collision disabled during dash
+- **[TWEAK]** World boundary bounce on dash — push-back 15 units on world_min/world_max contact
 - **[TWEAK]** Dead code removed: _on_smash_cooldown_finished() in PlayerBasics.gd
 
 
 ## v1.3.1a
 ### SMASH CLEANUP
 - **[ADD]** SmashButton and SmashButtonPressed textures created and assigned to SecondaryAbilityButton
-- **[FIX]** Old tap-to-smash still active alongside button-based smash - _input(), _try_melee_smash(), _request_melee_kill() removed
+- **[FIX]** Old tap-to-smash still active alongside button-based smash — _input(), _try_melee_smash(), _request_melee_kill() removed
 
 
 ## v1.3.0a
 ### DIFFICULTY + ABILITY REDESIGN
-> MP suffix dropped - multiplayer is now standard.
+> MP suffix dropped — multiplayer is now standard.
 
-- **[ADD]** Burst counter system - Mosin: 5 shots, Shotgun: 3 shots before lockout
-- **[ADD]** Weapon HUD - weapon name, ammo count, progress bar
-- **[ADD]** Smash redesigned - up to 3 nearest enemies highlighted automatically, button press executes kill
+- **[ADD]** Burst counter system — Mosin: 5 shots, Shotgun: 3 shots before lockout
+- **[ADD]** Weapon HUD — weapon name, ammo count, progress bar
+- **[ADD]** Smash redesigned — up to 3 nearest enemies highlighted automatically, button press executes kill
 - **[ADD]** Cooldown fade animation on SecondaryAbilityButton and MeatBombButton
-- **[ADD]** Data/weapons.json created - groundwork for JSON-driven weapon attributes
-- **[FIX]** receive_push RPC rejected in simultaneous pushback - changed from "authority" to "any_peer"
-- **[FIX]** ERR_UNAUTHORIZED despawn errors after MeatBomb explosion - server-only queue_free() used for spawner-managed nodes
-- **[FIX]** MeatBomb button stayed disabled forever for P2 after throwing - fixed with rpc_id() to authority client
+- **[ADD]** Data/weapons.json created — groundwork for JSON-driven weapon attributes
+- **[FIX]** receive_push RPC rejected in simultaneous pushback — changed from "authority" to "any_peer"
+- **[FIX]** ERR_UNAUTHORIZED despawn errors after MeatBomb explosion — server-only queue_free() used for spawner-managed nodes
+- **[FIX]** MeatBomb button stayed disabled forever for P2 after throwing — fixed with rpc_id() to authority client
 
 
 ## v1.2.9a_MP
 ### WEAPON SYNC
-- **[ADD]** current_weapon added to MultiplayerSynchronizer - remote players see correct weapon model on swap
-- **[ADD]** _apply_weapon() extracted from swap_weapon() - handles texture, muzzle position, fire_rate, WeaponDoll HUD
-- **[FIX]** Invalid assignment on muzzle (Nil) at spawn - setter now guarded; _apply_weapon() called at top of _ready()
+- **[ADD]** current_weapon added to MultiplayerSynchronizer — remote players see correct weapon model on swap
+- **[ADD]** _apply_weapon() extracted from swap_weapon() — handles texture, muzzle position, fire_rate, WeaponDoll HUD
+- **[FIX]** Invalid assignment on muzzle (Nil) at spawn — setter now guarded; _apply_weapon() called at top of _ready()
 
 
 ## v1.2.8a_MP
 ### SHOTGUN MUZZLE TUNING
-- **[FIX]** Shotgun pellets spawning far behind the muzzle - removed spawn_shotgun_rpc; all pellets rerouted through spawn_projectile()
+- **[FIX]** Shotgun pellets spawning far behind the muzzle — removed spawn_shotgun_rpc; all pellets rerouted through spawn_projectile()
 - **[TWEAK]** Shotgun muzzle position tuned to Vector2(0, -355); Mosin remains at Vector2(0, -373)
 
 
@@ -726,10 +722,10 @@
 
 ## v1.2.6a_MP
 ### WEAPON SWAP + SHOTGUN + WEAPONDOLL
-- **[ADD]** Weapon swap - Mosin and Shotgun selectable via dedicated controller button
-- **[ADD]** Shotgun - 3 pellets, 30 degree spread, 1.0s fire rate
-- **[ADD]** WeaponDoll HUD - shows current weapon sprite; updates on swap
-- **[FIX]** Swap double-firing on PC - fixed with elif branches and not _is_pressed guard
+- **[ADD]** Weapon swap — Mosin and Shotgun selectable via dedicated controller button
+- **[ADD]** Shotgun — 3 pellets, 30 degree spread, 1.0s fire rate
+- **[ADD]** WeaponDoll HUD — shows current weapon sprite; updates on swap
+- **[FIX]** Swap double-firing on PC — fixed with elif branches and not _is_pressed guard
 
 
 ## v1.2.5a_MP
@@ -740,14 +736,14 @@
 
 ## v1.2.4a_MP
 ### SECONDARY ABILITY LOGIC
-- **[ADD]** Melee smash - tap-to-kill enemies within range
-- **[ADD]** Pushback - radial impulse pushes all enemies within 500 units
+- **[ADD]** Melee smash — tap-to-kill enemies within range
+- **[ADD]** Pushback — radial impulse pushes all enemies within 500 units
 - **[ADD]** Visual cooldown via start_cooldown() on SecondaryAbilityButton
 
 
 ## v1.2.3a_MP
 ### INVENTORY MENU + SECONDARY SELECTION
-- **[ADD]** Inventory menu - pause-overlay panel for selecting secondary ability (Smash or Pushback)
+- **[ADD]** Inventory menu — pause-overlay panel for selecting secondary ability (Smash or Pushback)
 - **[ADD]** _refresh_inventory_ui() highlights active secondary and updates SecondaryAbilityButton skin
 
 
@@ -759,48 +755,48 @@
 
 ## v1.2.1a_MP
 ### PLAYER SKIN VARIANTS
-- **[ADD]** Per-player animated sprite color variants - 4 colors, 5-frame walk cycle each
+- **[ADD]** Per-player animated sprite color variants — 4 colors, 5-frame walk cycle each
 - **[ADD]** Four SpriteFrames .tres resources (Player001_Frames.tres through Player004_Frames.tres)
-- **[FIX]** All 4 MP instances showing Player 3 color - fixed with is_multiplayer_authority() guard in _apply_skin()
+- **[FIX]** All 4 MP instances showing Player 3 color — fixed with is_multiplayer_authority() guard in _apply_skin()
 
 
 ## v1.2.0a_MP
 ### ARCHITECTURE REFACTOR + DISPLAY FIXES
-- **[ADD]** GameManager autoload singleton introduced - centralizes spawn positions, scene paths, world bounds, JSON loading
+- **[ADD]** GameManager autoload singleton introduced — centralizes spawn positions, scene paths, world bounds, JSON loading
 - **[ADD]** MusicManager autoload
 - **[ADD]** Android IP input field repositions when soft keyboard opens
-- **[FIX]** Game not scaling on secondary device - stretch mode had been changed from viewport; reverted
-- **[FIX]** Controller scene broken during scaling investigation - anchors restored
+- **[FIX]** Game not scaling on secondary device — stretch mode had been changed from viewport; reverted
+- **[FIX]** Controller scene broken during scaling investigation — anchors restored
 
 
 ## v1.1.0a_MP
 ### COMBAT POLISH + ENEMY CONTACT
-- **[ADD]** Enemy contact damage - grace timer before damage begins
+- **[ADD]** Enemy contact damage — grace timer before damage begins
 - **[ADD]** Slow health regen after breaking enemy contact
-- **[ADD]** Weapon sounds broadcast via play_weapon_sound_rpc - all peers hear each other's shots
-- **[FIX]** Remote players showing wrong color at spawn - is_inside_tree() guards added to _apply_skin()
+- **[ADD]** Weapon sounds broadcast via play_weapon_sound_rpc — all peers hear each other's shots
+- **[FIX]** Remote players showing wrong color at spawn — is_inside_tree() guards added to _apply_skin()
 
 
 ## v1.0.0a_MP
 ### LAN MULTIPLAYER FOUNDATION
 > First fundamental change: retrofitting LAN multiplayer before additional systems to avoid painful refactors later.
 
-- **[ADD]** LAN multiplayer via Godot 4 high-level API - host/join lobby, up to 4 players
+- **[ADD]** LAN multiplayer via Godot 4 high-level API — host/join lobby, up to 4 players
 - **[ADD]** MultiplayerSpawner for enemies, projectiles, and players
-- **[ADD]** MultiplayerSynchronizer on player scenes - position and rotation synced
+- **[ADD]** MultiplayerSynchronizer on player scenes — position and rotation synced
 - **[ADD]** Android manifest permissions: INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE
-- **[FIX]** Enemies heading northwest - fixed by finding nearest player on host
-- **[FIX]** Client projectiles invisible - MultiplayerSpawner added
-- **[FIX]** Client enemy kills causing desync - projectile physics guarded with is_server()
-- **[FIX]** APK host button silently failing - Android permissions were missing from export manifest
+- **[FIX]** Enemies heading northwest — fixed by finding nearest player on host
+- **[FIX]** Client projectiles invisible — MultiplayerSpawner added
+- **[FIX]** Client enemy kills causing desync — projectile physics guarded with is_server()
+- **[FIX]** APK host button silently failing — Android permissions were missing from export manifest
 
 
 ### v0.75a
 ### ENEMIES, PROJECTILES + CAMERA PIVOT
 - **[ADD]** Basic enemy with pathfinding, dot-product facing detection, and spawner
-- **[ADD]** Projectile system - basic_projectile.tscn with direction, speed, lifetime
+- **[ADD]** Projectile system — basic_projectile.tscn with direction, speed, lifetime
 - **[ADD]** Weapon firing with muzzle position node
-- **[TWEAK]** Swapped to Camera2D - velocity-driven map physics removed
+- **[TWEAK]** Swapped to Camera2D — velocity-driven map physics removed
   - _Incompatible with enemy/projectile world-space positioning._
 
 
@@ -812,14 +808,14 @@
 
 ### v0.0a
 ### CONCEPTUALIZATION
-- **[ADD]** Core concept - sentient AI-powered vacuum, top-down zombie horde
+- **[ADD]** Core concept — sentient AI-powered vacuum, top-down zombie horde
   - _Influences: CoD Zombies, Zombie Estate 2, Escape from Tarkov_
-- **[ADD]** Godot 4 project scaffolded - GDScript, Android target
+- **[ADD]** Godot 4 project scaffolded — GDScript, Android target
 - **[ADD]** Sprite-based map with StaticBody2D collision
 - **[ADD]** Main menu with basic navigation
 
 ---
-_SiZ (Suck it, Zombies) - Godot 4.6 / GDScript / Android LAN Multiplayer_
+_SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-05-30 (v1.5.2)_
+_Changelog updated 2026-06-03 (v1.6)_
