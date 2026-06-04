@@ -1,6 +1,16 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v1.6.1
+### ENEMY MOVEMENT + POLISH
+
+- **[FIX]** Enemy separation reworked -- hard stop replaced with a soft radial separation force; enemies now deflect around one another instead of locking up; rotation smoothed with `lerp_angle` to prevent spinning on contact; separation radius 220 units
+- **[FIX]** Spawn puff particles now render below fog and roof layers (z_index lowered from 21 to 5)
+- **[FIX]** Off-screen enemy recycle timer now pauses while a MeatBomb is active -- enemies chasing the bomb are no longer recycled mid-chase
+- **[FIX]** Skip button on item slot now reappears correctly after returning from the armory during intermission
+
+---
+
 ## v1.6
 ### SPAWN OVERHAUL + QOL
 
@@ -818,4 +828,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-06-03 (v1.6)_
+_Changelog updated 2026-06-03 (v1.6.1)_
