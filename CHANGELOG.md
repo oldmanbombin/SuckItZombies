@@ -1,6 +1,16 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v1.6.2
+### HYPNO ALLIES + ENEMY FIXES
+
+- **[CHANGE]** Hypno Allies reworked -- hold distance reduced to near-zero so allies close all the way in; attack interval halved; damage tripled; attack fires on any valid target in range without distance gating; allies now behave like aggressive fighters rather than passive followers
+- **[FIX]** Off-screen enemy recycling now uses player facing direction (body rotation) instead of movement velocity -- enemies respawn in front of the player even when standing still
+- **[FIX]** Skip button double-tap issue resolved -- `_is_pressed` no longer blocks subsequent taps in skip mode
+- **[FIX]** `try_skip_intermission` no longer gated on `_bar_drain_active` -- skip fires immediately on tap at any point during intermission
+
+---
+
 ## v1.6.1
 ### ENEMY MOVEMENT + POLISH
 
@@ -828,4 +838,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-06-03 (v1.6.1)_
+_Changelog updated 2026-06-05 (v1.6.2)_
