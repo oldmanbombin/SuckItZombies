@@ -1,6 +1,16 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v1.7
+### HYPNO ALLIES + SPAWN PROGRESSION
+
+- **[CHANGE]** Hypno Ally tint reworked -- now uses enemy_hueshift_outline shader with green hue shift and green outline instead of modulate; visible on all enemy types including near-black tank sprites
+- **[ADD]** Mutant hypno allies heal nearby players instead of damaging them -- mutant basic 1%/sec, mutant runner 3%/sec, mutant tank 10%/sec; heal fires on DAMAGE_INTERVAL tick via receive_ally_heal RPC
+- **[CHANGE]** Enemy spawn progression extended through round 40 -- mutant variants now displace regular enemies in 5 phases from round 12 onward; phase 2 (12-19): mutant basics lerp in to 33%; phase 3 (19-26): mutant runners replace regular runners; phase 4 (26-33): mutant tanks replace regular tanks; phase 5 (33-40): mutant basics fade out, runner/tank absorb share; phase 6 (40+): frozen at 50/50 mutant runner/tank
+- **[ADD]** receive_ally_heal RPC added to PlayerBasics for mutant ally healing
+
+---
+
 ## v1.6.2
 ### HYPNO ALLIES + ENEMY FIXES
 
@@ -33,6 +43,16 @@
 - **[ADD]** "Round: " / "Ronda: " added to translation dictionary
 - **[FIX]** Spawned enemies briefly displaying Crawler animation before morphing to correct type -- `_ready()` now sets correct walk animation immediately after loading attributes
 - **[FIX]** Currency label position overridden at runtime in touch mode -- touch mode no longer repositions the currency label
+
+---
+
+
+### ENEMY MOVEMENT + POLISH
+
+- **[FIX]** Enemy separation reworked -- hard stop replaced with a soft radial separation force; enemies now deflect around one another instead of locking up; rotation smoothed with `lerp_angle` to prevent spinning on contact; separation radius 220 units
+- **[FIX]** Spawn puff particles now render below fog and roof layers (z_index lowered from 21 to 5)
+- **[FIX]** Off-screen enemy recycle timer now pauses while a MeatBomb is active -- enemies chasing the bomb are no longer recycled mid-chase
+- **[FIX]** Skip button on item slot now reappears correctly after returning from the armory during intermission
 
 ---
 
@@ -838,4 +858,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-06-05 (v1.6.2)_
+_Changelog updated 2026-06-07 (v1.7)_
