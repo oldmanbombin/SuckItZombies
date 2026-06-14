@@ -1,6 +1,15 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v1.8
+### INPUT FIXES + MEATBOMB OVERHAUL
+
+- **[FIX]** Virtual keyboard losing association with initials input field on game over screen — `_on_initials_gui_input` now calls `virtual_keyboard_hide()` before `virtual_keyboard_show()` to force Android to re-associate input; `_process` adds a force-focus guard that grabs focus on `initials_input` whenever the keyboard is visible but focus has drifted
+- **[FIX]** Input fields becoming unresponsive after dismissing the keyboard without submitting — three signal lambdas replaced with named functions to prevent silent signal failures; hide-before-show added to both field tap handlers; `_process` now force-focuses the expected field if the keyboard is up but focus is lost
+- **[ADD]** MeatBomb AOE indicator — pulsing ring drawn at explosion radius while the bomb is live; color shifts orange to red and pulse frequency accelerates in sync with beep acceleration as the fuse runs out; accounts for Mk.III radius upgrade
+- **[CHANGE]** MeatBomb fuse timing reversed — base fuse reduced to 5 seconds; Mk.IV upgrade extends fuse to 10 seconds, giving more time to group enemies rather than less
+
+---
 ## v1.7
 ### HYPNO ALLIES + SPAWN PROGRESSION
 
@@ -858,4 +867,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-06-07 (v1.7)_
+_Changelog updated 2026-06-13 (v1.8)_
