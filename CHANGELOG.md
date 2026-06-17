@@ -1,11 +1,24 @@
 # SiZ — Suck it, Zombies
 ## Development Changelog
 
+## v1.8.2
+### HYPNO ALLY FIXES + LAN STABILITY
+
+- **[FIX]** Hypno Ally refill permanently blocked when an ally was killed by damage instead of running out its kill count -- die() now notifies the owning player and cleans up ally state correctly in every death path
+- **[FIX]** Hypno Ally ability could become permanently stuck on LAN clients -- added a synced ally count so the client correctly gates re-cast and triggers the cooldown
+- **[FIX]** Added a per-frame safety check that force-clears the Hypno Ally button and starts its cooldown if it is ever found stuck with no allies alive, as a last-resort guard
+- **[FIX]** LAN clients lost ammo, held item, bomb count, and ability cooldowns after visiting the Armory -- client now pushes this state to the host before the scene changes
+- **[FIX]** Hypno Ally kill counter was draining per attack instead of per confirmed kill, causing allies to expire early against tougher enemies in later rounds
+- **[FIX]** Initials input on the game over screen could fail to accept typed text on the first attempt -- removed a conflicting keyboard call so focus is handled correctly
+- **[ADD]** Hypno Ally health bar -- world-space bar above each ally showing kills remaining, fading green to red
+- **[ADD]** Hypno Ally tint now fades from green toward gray as the ally's health drops
+
+---
 ## v1.8
 ### INPUT FIXES + MEATBOMB OVERHAUL
 
 - **[FIX]** Virtual keyboard losing association with initials input field on game over screen — `_on_initials_gui_input` now calls `virtual_keyboard_hide()` before `virtual_keyboard_show()` to force Android to re-associate input; `_process` adds a force-focus guard that grabs focus on `initials_input` whenever the keyboard is visible but focus has drifted
-- **[FIX]** Input fields becoming unresponsive after dismissing the keyboard without submitting — three signal lambdas replaced with named functions to prevent silent signal failures; hide-before-show added to both field tap handlers; `_process` now force-focuses the expected field if the keyboard is up but focus is lost
+- **[FIX]** Input menu input fields becoming unresponsive after dismissing the keyboard without submitting — three signal lambdas replaced with named functions to prevent silent signal failures; hide-before-show added to both field tap handlers; `_process` now force-focuses the expected field if the keyboard is up but focus is lost
 - **[ADD]** MeatBomb AOE indicator — pulsing ring drawn at explosion radius while the bomb is live; color shifts orange to red and pulse frequency accelerates in sync with beep acceleration as the fuse runs out; accounts for Mk.III radius upgrade
 - **[CHANGE]** MeatBomb fuse timing reversed — base fuse reduced to 5 seconds; Mk.IV upgrade extends fuse to 10 seconds, giving more time to group enemies rather than less
 
@@ -867,4 +880,4 @@
 _SiZ (Suck it, Zombies) — Godot 4.6 / GDScript / Android LAN Multiplayer_
 
 ---
-_Changelog updated 2026-06-13 (v1.8)_
+_Changelog updated 2026-06-16 (v1.8.2)_
